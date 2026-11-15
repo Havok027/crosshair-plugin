@@ -39,6 +39,14 @@ MODELS = {
     "star": {"label": "Estrela (*)", "lines": [" ", "*", " "], "half_w": 7},
     "bracket": {"label": "Colchetes", "lines": [" ", "[ + ]", " "], "half_w": 22},
     "dash": {"label": "Traços", "lines": [" ", "- + -", " "], "half_w": 23},
+    "cross": {"label": "Cruz (|)", "lines": [" | ", "-+-", " | "], "half_w": 15},
+    "gap_cross": {"label": "Cruz vazada", "lines": [" | ", "- -", " | "], "half_w": 15},
+    "diamond": {"label": "Losango", "lines": ["  ^  ", "<   >", "  v  "], "half_w": 22},
+    "paren": {"label": "Parênteses", "lines": [" ", "( + )", " "], "half_w": 22},
+    "angle": {"label": "Ângulos", "lines": [" ", "< + >", " "], "half_w": 22},
+    "arrows": {"label": "Setas", "lines": [" ", ">+<", " "], "half_w": 15},
+    "ring_plus": {"label": "Anel com cruz", "lines": [" ", "(+)", " "], "half_w": 15},
+    "hash": {"label": "Jogo da velha (#)", "lines": [" ", "#", " "], "half_w": 9},
 }
 
 # Marca no fim do arquivo do MangoHud que foi o plugin quem o escreveu. Assim ele
@@ -65,6 +73,7 @@ DEFAULTS = {
     "enabled": False,
     "model": "box",
     "resolution": "800p",
+    "resolution_auto": True,  # escolhe a resolução pelo ID do aparelho
     "color": "FF007B",  # rosa, igual ao plugin original
     "size": 100,  # porcentagem do tamanho padrão
     "opacity": 100,  # opacidade da mira (10 a 100%)
@@ -88,6 +97,49 @@ LEGACY_OFFSETS = {
     ("2160p", "box"): (1900, 1060),
     ("2160p", "dot"): (1913, 1060),
 }
+
+# ID do aparelho (DMI: product_name / board_name) -> resolução da lista.
+DEVICE_IDS = {
+    "jupiter": "800p",  # Steam Deck LCD
+    "galileo": "800p",  # Steam Deck OLED
+    "83l3": "1200p",  # Legion Go S
+    "83n6": "1200p",  # Legion Go S
+    "83q2": "1200p",  # Legion Go S
+    "83q3": "1200p",  # Legion Go S
+    "83e1": "1600p",  # Legion Go
+}
+DMI_DIR = "/sys/class/dmi/id"
+DRM_MODES_GLOB = "/sys/class/drm/card*-eDP-*/modes"
+
+
+def _read_text(path):
+    try:
+        with open(path, "r") as f:
+            return f.read().strip()
+    except Exception:
+        return ""
+
+
+def detect_resolution():
+    """Resolução do aparelho: 1º pelo ID (DMI), 2º pela tela interna (eDP). Sem achar, a 1ª da lista."""
+    first = next(iter(RESOLUTIONS))
+    for name in ("product_name", "board_name"):
+        found = DEVICE_IDS.get(_read_text(os.path.join(DMI_DIR, name)).lower())
+        if found in RESOLUTIONS:
+            return found
+    try:
+        for path in sorted(glob.glob(DRM_MODES_GLOB)):
+            m = re.match(r"^(\d+)x(\d+)", _read_text(path))
+            if not m:
+                continue
+            size = {int(m.group(1)), int(m.group(2))}  # a tela do Deck é nativa em retrato
+            for res_id, res in RESOLUTIONS.items():
+                if {res["width"], res["height"]} == size and "externo" not in res["label"].lower():
+                    return res_id
+    except Exception as e:
+        decky.logger.error(f"Erro ao detectar a resolução: {e}")
+    return first
+
 
 HEX_RE = re.compile(r"^[0-9A-Fa-f]{6}$")
 
@@ -659,11 +711,16 @@ class Plugin:
         try:
             with open(self.settings_path, "r") as f:
                 saved = json.load(f)
+            if "resolution_auto" not in saved:
+                # config antiga: só liga o automático se a resolução nunca foi trocada da 1ª da lista
+                saved["resolution_auto"] = saved.get("resolution", next(iter(RESOLUTIONS))) == next(iter(RESOLUTIONS))
             self.settings = self.sanitize({**DEFAULTS, **saved})
         except FileNotFoundError:
             pass
         except Exception as e:
             decky.logger.error(f"Erro ao ler configurações: {e}")
+        if self.settings.get("resolution_auto"):
+            self.settings["resolution"] = detect_resolution()
 
     def save_settings(self):
         try:
@@ -678,7 +735,8 @@ class Plugin:
         out["language"] = s.get("language") if s.get("language") in ("pt", "en", "es") else "pt"
         out["enabled"] = bool(s.get("enabled", False))
         out["model"] = s.get("model") if s.get("model") in MODELS else DEFAULTS["model"]
-        out["resolution"] = s.get("resolution") if s.get("resolution") in RESOLUTIONS else DEFAULTS["resolution"]
+        out["resolution"] = s.get("resolution") if s.get("resolution") in RESOLUTIONS else next(iter(RESOLUTIONS))
+        out["resolution_auto"] = bool(s.get("resolution_auto", True))
         color = str(s.get("color", DEFAULTS["color"])).lstrip("#")
         out["color"] = color.upper() if HEX_RE.match(color) else DEFAULTS["color"]
         try:
@@ -751,6 +809,7 @@ class Plugin:
                 "enabled": s["enabled"],
                 "model": s["model"],
                 "resolution": s["resolution"],
+                "resolution_auto": s["resolution_auto"],
                 "color": s["color"],
                 "size": s["size"],
                 "opacity": s["opacity"],
@@ -899,11 +958,15 @@ class Plugin:
     async def update_settings(self, patch: dict) -> dict:
         merged = dict(self.settings)
         for key in (
-            "enabled", "model", "resolution", "color", "size", "auto_apply", "language",
+            "enabled", "model", "resolution", "resolution_auto", "color", "size", "auto_apply", "language",
             "opacity", "outline", "outline_color", "outline_width",
         ):
             if key in patch:
                 merged[key] = patch[key]
+        if "resolution" in patch and "resolution_auto" not in patch:
+            merged["resolution_auto"] = False  # escolha manual desliga o automático
+        if patch.get("resolution_auto"):
+            merged["resolution"] = detect_resolution()
         merged["nudge"] = dict(self.settings["nudge"])
         if "nudge_x" in patch or "nudge_y" in patch:
             model_id = merged["model"] if merged["model"] in MODELS else self.settings["model"]

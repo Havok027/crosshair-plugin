@@ -37,7 +37,7 @@
 
 | Recurso | O que faz |
 |---|---|
-| 🎯 **7 modelos de mira** | Caixa, Ponto, Anel, X, Estrela, Colchetes e Traços, escolhidos em uma lista |
+| 🎯 **15 modelos de mira** | Caixa, Ponto, Anel, X, Estrela, Colchetes, Traços, Cruz, Cruz vazada, Losango, Parênteses, Ângulos, Setas, Anel com cruz e #, escolhidos em uma lista |
 | 🎨 **Cores e tamanho** | 8 cores prontas, RGB personalizado e escala de 50% a 300% |
 | 📐 **Escala pelo centro** | A mira cresce a partir do centro, sem sair do lugar (com calibração opcional) |
 | 🕹️ **Atalho de botões** | Grave 2 botões do controle e ligue ou desligue a mira sem abrir o menu |
@@ -135,6 +135,14 @@ O **tempo segurando** vai de 0 a 1000 ms. O padrão é 0 (instantâneo). Aumente
 | Estrela | <code>*</code> | Marca pequena |
 | Colchetes | <code>[ + ]</code> | Destaca o centro |
 | Traços | <code>- + -</code> | Linhas dos lados |
+| Cruz | <code>-+-</code> com <code>&#124;</code> em cima e embaixo | Cruz longa |
+| Cruz vazada | <code>- -</code> com <code>&#124;</code> em cima e embaixo | Centro livre |
+| Losango | <code>&lt;   &gt;</code> com <code>^</code> e <code>v</code> | Centro livre |
+| Parênteses | <code>( + )</code> | Moldura redonda |
+| Ângulos | <code>&lt; + &gt;</code> | Moldura em ângulo |
+| Setas | <code>&gt;+&lt;</code> | Aponta para o centro |
+| Anel com cruz | <code>(+)</code> | Compacta |
+| Jogo da velha | <code>#</code> | Discreta |
 
 **Cores prontas:**
 
@@ -160,7 +168,7 @@ Além delas, dá para montar qualquer cor em **Cor personalizada (RGB)**.
 | Monitor externo 4K | 3840 x 2160 |
 
 > [!NOTE]
-> Os modelos novos (Anel, X, Estrela, Colchetes e Traços) têm a centralização **estimada**. Se algum ficar um pouco fora do centro, ajuste com os sliders X e Y. O ajuste é salvo por modelo.
+> Os modelos novos (todos, exceto Caixa e Ponto) têm a centralização **estimada**. Se algum ficar um pouco fora do centro, ajuste com os sliders X e Y. O ajuste é salvo por modelo.
 
 ---
 

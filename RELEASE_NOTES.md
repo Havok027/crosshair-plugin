@@ -1,21 +1,17 @@
-## Crosshair v1.7.9
+## Crosshair v1.7.10
 
 ### Novidades
-- **Opacidade** da mira, de 10% a 100%, na guia Aparência.
-- **Contorno** opcional, com cor (preto por padrão) e espessura de 1 a 5.
-- Opacidade e contorno aparecem no cartão de resumo e são salvos em cada perfil de jogo.
-- Perfis antigos continuam valendo e abrem com opacidade 100% e sem contorno.
-- Roadmap dos READMEs: opacidade e contorno concluídos.
+- **Resolução automática:** o plugin identifica o aparelho pelo ID (Steam Deck, Legion Go S, Legion Go) e seleciona a resolução da lista. Se o ID não for reconhecido, usa o tamanho da tela interna; se ainda assim não achar, deixa a primeira opção.
+- Opção "Resolução automática" na guia Aparência, em Tela e posição. Escolher uma resolução manualmente desliga o automático.
+- Quem já tinha escolhido outra resolução continua com ela.
+- **8 modelos novos de mira:** Cruz, Cruz vazada, Losango, Parênteses, Ângulos, Setas, Anel com cruz e Jogo da velha (#). Agora são 15.
+- Os modelos novos têm a centralização estimada; ajuste X e Y se precisar.
 
 ### Validação
-- Testes automatizados da configuração do MangoHud, dos valores inválidos, dos perfis e dos controles.
-- O visual ainda precisa ser conferido no aparelho.
+- Testes automatizados da detecção do aparelho e da tela, do retorno à primeira opção, dos perfis antigos e de todos os modelos em todas as resoluções.
 
 ### Mantido
-- Restauração do MangoHud anterior ao desligar a mira.
-- Sete modelos, cores prontas e RGB, tamanho, escala pelo centro, calibração, posição e perfis por jogo.
-- Atalho de botões, com gravação pela interface.
-- Steam Deck, Legion Go S, Legion Go, 1080p e 4K.
+- Opacidade e contorno, perfis por jogo, atalho de botões e restauração do MangoHud.
 
 ### Como instalar
 1. No Decky, ative o Modo desenvolvedor nas configurações.

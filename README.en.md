@@ -23,7 +23,7 @@
 
 | Feature | What it does |
 |---|---|
-| **7 crosshair styles** | Box, Dot, Ring, X, Star, Brackets and Dashes, selected from a dropdown |
+| **15 crosshair styles** | Box, Dot, Ring, X, Star, Brackets, Dashes, Cross, Open cross, Diamond, Parentheses, Angles, Arrows, Ring with cross and #, selected from a dropdown |
 | **Colors and size** | 8 presets, custom RGB and scaling from 50% to 300% |
 | **Scaling from the center** | The crosshair grows around its center, with optional calibration |
 | **Controller shortcut** | Record 2 buttons to toggle the crosshair without opening the menu |
@@ -105,6 +105,14 @@ The input reader preserves press and release events that arrive together, includ
 | Star | `*` | A small mark |
 | Brackets | `[ + ]` | Highlights the center |
 | Dashes | `- + -` | Lines on each side |
+| Cross | `-+-` with `|` above and below | Long cross |
+| Open cross | `- -` with `|` above and below | Free center |
+| Diamond | `<   >` with `^` and `v` | Free center |
+| Parentheses | `( + )` | Round frame |
+| Angles | `< + >` | Angled frame |
+| Arrows | `>+<` | Points to the center |
+| Ring with cross | `(+)` | Compact |
+| Hash | `#` | Discreet |
 
 | Color | Hex | Color | Hex |
 |---|---|---|---|
@@ -126,7 +134,7 @@ Use **Custom color (RGB)** to create any other color.
 | External monitor, 4K | 3840 × 2160 |
 
 > [!NOTE]
-> Centering for Ring, X, Star, Brackets and Dashes is estimated. Adjust X/Y if necessary; position is saved per style.
+> Centering for every style except Box and Dot is estimated. Adjust X/Y if necessary; position is saved per style.
 
 ## How it works
 

@@ -23,7 +23,7 @@
 
 | Función | Qué hace |
 |---|---|
-| **7 modelos de mira** | Caja, Punto, Anillo, X, Estrella, Corchetes y Guiones, en una lista desplegable |
+| **15 modelos de mira** | Caja, Punto, Anillo, X, Estrella, Corchetes, Guiones, Cruz, Cruz abierta, Rombo, Paréntesis, Ángulos, Flechas, Anillo con cruz y #, en una lista desplegable |
 | **Colores y tamaño** | 8 colores predefinidos, RGB personalizado y escala del 50% al 300% |
 | **Escala desde el centro** | La mira crece desde su centro, con calibración opcional |
 | **Atajo del mando** | Graba 2 botones para activar o desactivar la mira sin abrir el menú |
@@ -105,6 +105,14 @@ La lectura conserva los eventos de pulsación y liberación que llegan juntos, i
 | Estrella | `*` | Marca pequeña |
 | Corchetes | `[ + ]` | Destaca el centro |
 | Guiones | `- + -` | Líneas a los lados |
+| Cruz | `-+-` con `|` arriba y abajo | Cruz larga |
+| Cruz abierta | `- -` con `|` arriba y abajo | Centro libre |
+| Rombo | `<   >` con `^` y `v` | Centro libre |
+| Paréntesis | `( + )` | Marco redondo |
+| Ángulos | `< + >` | Marco en ángulo |
+| Flechas | `>+<` | Apuntan al centro |
+| Anillo con cruz | `(+)` | Compacta |
+| Almohadilla | `#` | Discreta |
 
 | Color | Código | Color | Código |
 |---|---|---|---|
@@ -126,7 +134,7 @@ Usa **Color personalizado (RGB)** para crear cualquier otro color.
 | Monitor externo, 4K | 3840 × 2160 |
 
 > [!NOTE]
-> El centrado de Anillo, X, Estrella, Corchetes y Guiones es estimado. Ajusta X/Y si hace falta; la posición se guarda por modelo.
+> El centrado de todos los modelos, salvo Caja y Punto, es estimado. Ajusta X/Y si hace falta; la posición se guarda por modelo.
 
 ## Cómo funciona
 
@@ -166,7 +174,7 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Estado | Elemento |
 |:---:|---|
-| ✅ | Legion Go S, colores, tamaño y 7 modelos |
+| ✅ | Legion Go S, colores, tamaño y 15 modelos |
 | ✅ | Perfiles por juego y escala desde el centro |
 | ✅ | Grabación del mando, lectura en el juego y restauración de MangoHud |
 | ✅ | Versiones automáticas y Direct Updater |
