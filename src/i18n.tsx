@@ -133,6 +133,16 @@ export const messages = {
   "Colchetes": ["Brackets", "Corchetes"],
   "Traços": ["Dashes", "Guiones"],
   "Monitor externo": ["External monitor", "Monitor externo"],
+  "Resolução automática": ["Automatic resolution", "Resolución automática"],
+  "Escolhe pelo ID do aparelho. Se não achar, usa a primeira da lista.": ["Picked by device ID. If not found, the first one in the list is used.", "Se elige por el ID del dispositivo. Si no se encuentra, se usa la primera de la lista."],
+  "Cruz (|)": ["Cross (|)", "Cruz (|)"],
+  "Cruz vazada": ["Open cross", "Cruz abierta"],
+  "Losango": ["Diamond", "Rombo"],
+  "Parênteses": ["Parentheses", "Paréntesis"],
+  "Ângulos": ["Angles", "Ángulos"],
+  "Setas": ["Arrows", "Flechas"],
+  "Anel com cruz": ["Ring with cross", "Anillo con cruz"],
+  "Jogo da velha (#)": ["Hash (#)", "Almohadilla (#)"],
   "D-Cima": ["D-Up", "Cruceta arriba"],
   "D-Baixo": ["D-Down", "Cruceta abajo"],
   "D-Esquerda": ["D-Left", "Cruceta izquierda"],
@@ -178,6 +188,8 @@ export function useTranslation(): Translate {
 export function modelLabel(id: string, t: Translate): string {
   const keys: Record<string, MessageKey> = {
     box: "Caixa", dot: "Ponto (+)", ring: "Anel (O)", x: "X", star: "Estrela (*)", bracket: "Colchetes", dash: "Traços",
+    cross: "Cruz (|)", gap_cross: "Cruz vazada", diamond: "Losango", paren: "Parênteses", angle: "Ângulos",
+    arrows: "Setas", ring_plus: "Anel com cruz", hash: "Jogo da velha (#)",
   };
   return keys[id] ? t(keys[id]) : id;
 }

@@ -374,6 +374,14 @@ export function Content() {
 
             <FoldSection id="display" title={t("Tela e posição")}>
               <PanelSectionRow>
+                <ToggleField
+                  label={t("Resolução automática")}
+                  description={t("Escolhe pelo ID do aparelho. Se não achar, usa a primeira da lista.")}
+                  checked={settings.resolution_auto}
+                  onChange={(value: boolean) => patchSettings({ resolution_auto: value })}
+                />
+              </PanelSectionRow>
+              <PanelSectionRow>
                 <DropdownItem
                   label={t("Resolução da tela")}
                   rgOptions={resolutions.map((res) => ({ data: res.id, label: res.label.replace("Monitor externo", t("Monitor externo")) }))}

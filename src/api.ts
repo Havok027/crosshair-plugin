@@ -8,6 +8,7 @@ export interface Settings {
   enabled: boolean;
   model: string;
   resolution: string;
+  resolution_auto: boolean; // resolução escolhida pelo ID do aparelho
   color: string; // RRGGBB, sem "#"
   size: number; // porcentagem (50 a 300)
   opacity: number; // opacidade da mira (10 a 100)
