@@ -1,14 +1,14 @@
-## Crosshair v1.7.8
+## Crosshair v1.7.9
 
 ### Novidades
-- A barra **Ajuda** abre a explicação da guia só por toque. O botão Y deixou de abrir a ajuda.
-- Botões Criar/Atualizar, Renomear e Excluir perfil com um pequeno espaço entre eles.
-- Removido o ✓ das guias e dos tamanhos. A seleção continua marcada pelo fundo preenchido.
-- Efeito de foco mais discreto nos botões, guias, tamanhos e na barra Ajuda.
-- Roadmap dos READMEs: leitura em jogo validada; L3, R3 e botões traseiros saíram da lista.
+- **Opacidade** da mira, de 10% a 100%, na guia Aparência.
+- **Contorno** opcional, com cor (preto por padrão) e espessura de 1 a 5.
+- Opacidade e contorno aparecem no cartão de resumo e são salvos em cada perfil de jogo.
+- Perfis antigos continuam valendo e abrem com opacidade 100% e sem contorno.
+- Roadmap dos READMEs: opacidade e contorno concluídos.
 
 ### Validação
-- Testes automatizados da barra Ajuda por toque, dos estilos sem ✓ e do foco.
+- Testes automatizados da configuração do MangoHud, dos valores inválidos, dos perfis e dos controles.
 - O visual ainda precisa ser conferido no aparelho.
 
 ### Mantido

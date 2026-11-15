@@ -174,7 +174,7 @@ Registros: `~/homebrew/logs/Crosshair/`.
 | ✅ | Pestañas inspiradas en Mako, con L1/R1 para cambiar de pestaña y secciones que se contraen |
 | ✅ | Validar LB, RB, LT, RT, Menu y View en el juego |
 | 🧭 | Calibración automática del centrado |
-| 💡 | Opacidad y contorno |
+| ✅ | Opacidad y contorno |
 | 💡 | Detección automática de resolución |
 | 💡 | Más modelos de mira |
 | 💡 | Publicación en la tienda oficial de Decky |

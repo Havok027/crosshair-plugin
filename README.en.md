@@ -174,7 +174,7 @@ Logs: `~/homebrew/logs/Crosshair/`.
 | ✅ | Mako-inspired tabs, with L1/R1 to switch tabs and foldable sections |
 | ✅ | Validate in-game LB, RB, LT, RT, Menu and View |
 | 🧭 | Automatic centering calibration |
-| 💡 | Opacity and outline |
+| ✅ | Opacity and outline |
 | 💡 | Automatic display resolution detection |
 | 💡 | More crosshair styles |
 | 💡 | Publication in the official Decky store |

@@ -67,6 +67,10 @@ DEFAULTS = {
     "resolution": "800p",
     "color": "FF007B",  # rosa, igual ao plugin original
     "size": 100,  # porcentagem do tamanho padrão
+    "opacity": 100,  # opacidade da mira (10 a 100%)
+    "outline": False,  # contorno ao redor da mira
+    "outline_color": "000000",  # cor do contorno (preto por padrão)
+    "outline_width": 2,  # espessura do contorno (1 a 5)
     "nudge": {},  # ajuste fino por modelo: {"box": [dx, dy]}
     "comp": {},  # compensação de escala por modelo: {"box": [px, py]}
     "hotkey": {"enabled": False, "buttons": [], "hold_ms": 0, "v": 2},  # atalho liga/desliga
@@ -86,6 +90,25 @@ LEGACY_OFFSETS = {
 }
 
 HEX_RE = re.compile(r"^[0-9A-Fa-f]{6}$")
+
+
+def _look(raw):
+    """Opacidade e contorno validados (aceita valores ausentes ou inválidos)."""
+    try:
+        opacity = _clamp(int(raw.get("opacity", 100)), 10, 100)
+    except (TypeError, ValueError):
+        opacity = 100
+    try:
+        width = _clamp(int(raw.get("outline_width", 2)), 1, 5)
+    except (TypeError, ValueError):
+        width = 2
+    color = str(raw.get("outline_color", "000000")).lstrip("#")
+    return {
+        "opacity": opacity,
+        "outline": bool(raw.get("outline", False)),
+        "outline_color": color.upper() if HEX_RE.match(color) else "000000",
+        "outline_width": width,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -590,6 +613,7 @@ def sanitize_profile(raw, name):
         "size": size,
         "nudge_x": nudge_x,
         "nudge_y": nudge_y,
+        **_look(raw),
     }
 
 
@@ -671,6 +695,7 @@ class Plugin:
                     except (TypeError, ValueError):
                         continue
         out["nudge"] = nudge
+        out.update(_look(s))
         comp = {}
         raw_comp = s.get("comp", {})
         if isinstance(raw_comp, dict):
@@ -728,6 +753,10 @@ class Plugin:
                 "resolution": s["resolution"],
                 "color": s["color"],
                 "size": s["size"],
+                "opacity": s["opacity"],
+                "outline": s["outline"],
+                "outline_color": s["outline_color"],
+                "outline_width": s["outline_width"],
                 "nudge_x": nx,
                 "nudge_y": ny,
                 "comp_x": cx,
@@ -742,6 +771,10 @@ class Plugin:
                     "model": v["model"],
                     "color": v["color"],
                     "size": v["size"],
+                    "opacity": v["opacity"],
+                    "outline": v["outline"],
+                    "outline_color": v["outline_color"],
+                    "outline_width": v["outline_width"],
                     "nudge_x": v["nudge_x"],
                     "nudge_y": v["nudge_y"],
                 }
@@ -805,12 +838,19 @@ class Plugin:
             lines = ["", "", ""]
             x, y = 0, 0
         font_size = max(1, round(REF_FONT_SIZE * s["size"] / 100))
+        alpha = round(s["opacity"] / 100, 2) if show else 1
+        outline = (
+            f"text_outline=1\ntext_outline_color={s['outline_color']}\ntext_outline_thickness={s['outline_width']}\n"
+            if show and s["outline"]
+            else "text_outline=0\n"
+        )
         return (
             "legacy_layout=false\n"
             "background_alpha=0\n"
-            "alpha=1\n"
+            f"alpha={alpha}\n"
             "background_color=020202\n"
             f"text_color={s['color']}\n"
+            f"{outline}"
             f"font_size={font_size}\n"
             f"custom_text={lines[0]}\n"
             f"custom_text={lines[1]}\n"
@@ -858,7 +898,10 @@ class Plugin:
 
     async def update_settings(self, patch: dict) -> dict:
         merged = dict(self.settings)
-        for key in ("enabled", "model", "resolution", "color", "size", "auto_apply", "language"):
+        for key in (
+            "enabled", "model", "resolution", "color", "size", "auto_apply", "language",
+            "opacity", "outline", "outline_color", "outline_width",
+        ):
             if key in patch:
                 merged[key] = patch[key]
         merged["nudge"] = dict(self.settings["nudge"])
@@ -916,6 +959,10 @@ class Plugin:
                 "size": s["size"],
                 "nudge_x": nx,
                 "nudge_y": ny,
+                "opacity": s["opacity"],
+                "outline": s["outline"],
+                "outline_color": s["outline_color"],
+                "outline_width": s["outline_width"],
             },
             name or appid,
         )
@@ -946,6 +993,8 @@ class Plugin:
         merged["model"] = prof["model"]
         merged["color"] = prof["color"]
         merged["size"] = prof["size"]
+        for key in ("opacity", "outline", "outline_color", "outline_width"):
+            merged[key] = prof[key]
         merged["nudge"] = dict(self.settings["nudge"])
         merged["nudge"][prof["model"]] = [prof["nudge_x"], prof["nudge_y"]]
         self.settings = self.sanitize(merged)

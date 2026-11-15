@@ -217,7 +217,7 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 | ✅ | Releases e Direct Updater | Compilação e publicação automáticas |
 | ✅ | Validar a leitura em jogo | LB, RB, LT, RT, Menu e View |
 | 🧭 | Calibração automática | Centralizar cada modelo sem ajuste manual |
-| 💡 | Opacidade e contorno | Mais legibilidade em cenas claras |
+| ✅ | Opacidade e contorno | Mais legibilidade em cenas claras |
 | 💡 | Resolução automática | Detectar a tela sem escolher na lista |
 | 💡 | Mais modelos | Mira com braços e formatos novos |
 | ✅ | Português, inglês e espanhol | README com links de idioma e interface com dropdown |
