@@ -215,8 +215,7 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 | ✅ | Atalho de botões | Gravação pela interface e leitura em jogo |
 | ✅ | MangoHud preservado | O overlay de antes volta ao desligar a mira |
 | ✅ | Releases e Direct Updater | Compilação e publicação automáticas |
-| 🔄 | Validar a leitura em jogo | LB, RB, LT, RT, Menu e View |
-| 🧭 | L3, R3 e botões traseiros | Leitura em jogo dos controles que não são da Valve |
+| ✅ | Validar a leitura em jogo | LB, RB, LT, RT, Menu e View |
 | 🧭 | Calibração automática | Centralizar cada modelo sem ajuste manual |
 | 💡 | Opacidade e contorno | Mais legibilidade em cenas claras |
 | 💡 | Resolução automática | Detectar a tela sem escolher na lista |
@@ -234,7 +233,8 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 
 | Versão | Destaques |
 |:---:|---|
-| **1.7.7** | Novo visual das guias e do resumo (guia ativa em azul claro com ✓, status em amarelo) · barra **Ajuda (Y)** que explica cada guia · cartão de resumo logo abaixo da barra |
+| **1.7.8** | Barra **Ajuda** só por toque · botões de perfil mais separados · sem ✓ nas guias e nos tamanhos · foco mais discreto · roadmap atualizado |
+| **1.7.7** | Novo visual das guias e do resumo (guia ativa em azul claro, status em amarelo) · barra **Ajuda** que explica cada guia · cartão de resumo logo abaixo da barra |
 | **1.7.6** | Seleção clara em todas as guias: guia ativa com marca e destaque próprio, tamanho escolhido com ✓, barras de seção abertas ou fechadas, e foco visível em todos os botões |
 | **1.7.5** | Aparência e Tela na mesma guia · seções que recolhem com seta · tabela de resumo diferente em cada guia, com os detalhes do perfil · guia **Perfis** com criar, renomear e excluir · atalho dentro de **Config.** |
 | **1.7.3** | Guias no topo, com ícone e nome embaixo · nova guia **Config.** com o idioma · perfil do jogo no fim de **Aparência** |

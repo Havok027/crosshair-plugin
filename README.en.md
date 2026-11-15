@@ -172,8 +172,7 @@ Logs: `~/homebrew/logs/Crosshair/`.
 | ✅ | Automated releases and Direct Updater |
 | ✅ | Portuguese, English and Spanish documentation and interface |
 | ✅ | Mako-inspired tabs, with L1/R1 to switch tabs and foldable sections |
-| 🔄 | Validate in-game LB, RB, LT, RT, Menu and View |
-| 🧭 | L3/R3 and rear buttons on non-Valve controllers |
+| ✅ | Validate in-game LB, RB, LT, RT, Menu and View |
 | 🧭 | Automatic centering calibration |
 | 💡 | Opacity and outline |
 | 💡 | Automatic display resolution detection |
@@ -186,7 +185,8 @@ Logs: `~/homebrew/logs/Crosshair/`.
 
 | Version | Highlights |
 |:---:|---|
-| **1.7.7** | New look for the tabs and summary card (active tab in light blue with ✓, status in yellow) · **Help (Y)** bar that explains each tab · summary card right below the bar |
+| **1.7.8** | **Help** bar by touch only · more space between the profile buttons · no ✓ on tabs and sizes · subtler focus · roadmap updated |
+| **1.7.7** | New look for the tabs and summary card (active tab in light blue, status in yellow) · **Help** bar that explains each tab · summary card right below the bar |
 | **1.7.6** | Clear selection on every tab: active tab with its own mark and highlight, chosen size with a ✓, open or closed section bars, and a visible focus on every button |
 | **1.7.5** | Appearance and Display in one tab; sections that fold with an arrow; a different summary table on each tab, with profile details; **Profiles** tab with create, rename and delete; shortcut inside **Settings** |
 | **1.7.3** | Tabs at the top with icon and label below; new **Settings** tab with the language; game profile at the bottom of **Appearance** |

@@ -1,15 +1,15 @@
-## Crosshair v1.7.7
+## Crosshair v1.7.8
 
 ### Novidades
-- Visual das guias e do cartão de resumo no estilo do NoLag: guia ativa em azul claro com ✓, status em amarelo (verde com a mira ativa) e divisórias mais marcadas.
-- Nova barra **Ajuda (Y)** logo abaixo das guias. Abre a explicação da guia atual por toque, com o botão A ou apertando Y.
-- O cartão de resumo vem direto abaixo da barra, sem o título "Estado atual".
-- Inclui os ajustes da 1.7.6: tamanho escolhido com ✓, barras de seção abertas ou fechadas e foco visível em todos os botões.
-- Documentação nos três idiomas atualizada.
+- A barra **Ajuda** abre a explicação da guia só por toque. O botão Y deixou de abrir a ajuda.
+- Botões Criar/Atualizar, Renomear e Excluir perfil com um pequeno espaço entre eles.
+- Removido o ✓ das guias e dos tamanhos. A seleção continua marcada pelo fundo preenchido.
+- Efeito de foco mais discreto nos botões, guias, tamanhos e na barra Ajuda.
+- Roadmap dos READMEs: leitura em jogo validada; L3, R3 e botões traseiros saíram da lista.
 
 ### Validação
-- Testes automatizados para a barra Ajuda, o botão Y, o estado selecionado e os estilos de foco.
-- O botão Y e o visual ainda precisam ser conferidos no aparelho.
+- Testes automatizados da barra Ajuda por toque, dos estilos sem ✓ e do foco.
+- O visual ainda precisa ser conferido no aparelho.
 
 ### Mantido
 - Restauração do MangoHud anterior ao desligar a mira.
