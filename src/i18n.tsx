@@ -142,7 +142,6 @@ export const messages = {
   "Ângulos": ["Angles", "Ángulos"],
   "Setas": ["Arrows", "Flechas"],
   "Anel com cruz": ["Ring with cross", "Anillo con cruz"],
-  "Jogo da velha (#)": ["Hash (#)", "Almohadilla (#)"],
   "D-Cima": ["D-Up", "Cruceta arriba"],
   "D-Baixo": ["D-Down", "Cruceta abajo"],
   "D-Esquerda": ["D-Left", "Cruceta izquierda"],
@@ -189,7 +188,7 @@ export function modelLabel(id: string, t: Translate): string {
   const keys: Record<string, MessageKey> = {
     box: "Caixa", dot: "Ponto (+)", ring: "Anel (O)", x: "X", star: "Estrela (*)", bracket: "Colchetes", dash: "Traços",
     cross: "Cruz (|)", gap_cross: "Cruz vazada", diamond: "Losango", paren: "Parênteses", angle: "Ângulos",
-    arrows: "Setas", ring_plus: "Anel com cruz", hash: "Jogo da velha (#)",
+    arrows: "Setas", ring_plus: "Anel com cruz",
   };
   return keys[id] ? t(keys[id]) : id;
 }

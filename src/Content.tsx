@@ -49,6 +49,7 @@ export function Content() {
   // Junta alterações rápidas (sliders) e envia ao backend de uma vez
   const pending = useRef<Record<string, unknown>>({});
   const timer = useRef<number | undefined>(undefined);
+  const seq = useRef(0);
 
   useEffect(() => {
     getState()
@@ -125,8 +126,12 @@ export function Content() {
     timer.current = window.setTimeout(async () => {
       const toSend = pending.current;
       pending.current = {};
+      const mine = ++seq.current;
       try {
-        setState(await updateSettings(toSend));
+        const next = await updateSettings(toSend);
+        // Resposta velha não pode desfazer uma escolha mais nova.
+        if (mine !== seq.current || Object.keys(pending.current).length > 0) return;
+        setState(next);
         setStatus("");
       } catch (error) {
         console.error(error);

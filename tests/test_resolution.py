@@ -80,7 +80,8 @@ class ResolutionTests(unittest.TestCase):
 
 class ModelTests(unittest.TestCase):
     def test_every_model_is_valid_and_centered(self):
-        self.assertGreaterEqual(len(plugin.MODELS), 15)
+        self.assertEqual(len(plugin.MODELS), 14)
+        self.assertNotIn("hash", plugin.MODELS)
         for mid, m in plugin.MODELS.items():
             self.assertEqual(len(m["lines"]), 3, mid)
             self.assertGreater(m["half_w"], 0, mid)
