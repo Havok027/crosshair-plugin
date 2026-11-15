@@ -1,15 +1,15 @@
-## Crosshair v1.7.6
+## Crosshair v1.7.7
 
 ### Novidades
-- A guia ativa agora tem marca ✓, fundo preenchido e barra grossa embaixo. O foco do controle é outro efeito (contorno branco), então dá para separar a guia **selecionada** da guia **em foco**.
-- O tamanho escolhido nos atalhos (50%, 100%...) fica preenchido e com ✓. O foco aparece como contorno branco.
-- As barras com seta mostram se a seção está aberta ou fechada; a fechada fica mais apagada.
-- Todos os botões (Criar/Atualizar, Renomear, Excluir, barras de seção e botões comuns) passam a ter foco visível.
+- Visual das guias e do cartão de resumo no estilo do NoLag: guia ativa em azul claro com ✓, status em amarelo (verde com a mira ativa) e divisórias mais marcadas.
+- Nova barra **Ajuda (Y)** logo abaixo das guias. Abre a explicação da guia atual por toque, com o botão A ou apertando Y.
+- O cartão de resumo vem direto abaixo da barra, sem o título "Estado atual".
+- Inclui os ajustes da 1.7.6: tamanho escolhido com ✓, barras de seção abertas ou fechadas e foco visível em todos os botões.
 - Documentação nos três idiomas atualizada.
 
 ### Validação
-- Testes automatizados para o estado selecionado das guias, dos atalhos de tamanho e das barras de seção, e para os estilos de foco.
-- O visual no aparelho ainda precisa ser conferido dentro e fora do QAM.
+- Testes automatizados para a barra Ajuda, o botão Y, o estado selecionado e os estilos de foco.
+- O botão Y e o visual ainda precisam ser conferidos no aparelho.
 
 ### Mantido
 - Restauração do MangoHud anterior ao desligar a mira.
