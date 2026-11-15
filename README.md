@@ -37,7 +37,7 @@
 
 | Recurso | O que faz |
 |---|---|
-| 🎯 **15 modelos de mira** | Caixa, Ponto, Anel, X, Estrela, Colchetes, Traços, Cruz, Cruz vazada, Losango, Parênteses, Ângulos, Setas, Anel com cruz e #, escolhidos em uma lista |
+| 🎯 **14 modelos de mira** | Caixa, Ponto, Anel, X, Estrela, Colchetes, Traços, Cruz, Cruz vazada, Losango, Parênteses, Ângulos, Setas, Anel com cruz, escolhidos em uma lista |
 | 🎨 **Cores e tamanho** | 8 cores prontas, RGB personalizado e escala de 50% a 300% |
 | 📐 **Escala pelo centro** | A mira cresce a partir do centro, sem sair do lugar (com calibração opcional) |
 | 🕹️ **Atalho de botões** | Grave 2 botões do controle e ligue ou desligue a mira sem abrir o menu |
@@ -142,7 +142,6 @@ O **tempo segurando** vai de 0 a 1000 ms. O padrão é 0 (instantâneo). Aumente
 | Ângulos | <code>&lt; + &gt;</code> | Moldura em ângulo |
 | Setas | <code>&gt;+&lt;</code> | Aponta para o centro |
 | Anel com cruz | <code>(+)</code> | Compacta |
-| Jogo da velha | <code>#</code> | Discreta |
 
 **Cores prontas:**
 
@@ -227,7 +226,7 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 | 🧭 | Calibração automática | Centralizar cada modelo sem ajuste manual |
 | ✅ | Opacidade e contorno | Mais legibilidade em cenas claras |
 | ✅ | Resolução automática | Escolhida pelo ID do aparelho; sem achar, usa a primeira da lista |
-| ✅ | Mais modelos | 15 modelos, com cruz, losango, parênteses, ângulos e setas |
+| ✅ | Mais modelos | 14 modelos, com cruz, losango, parênteses, ângulos e setas |
 | ✅ | Português, inglês e espanhol | README com links de idioma e interface com dropdown |
 | ✅ | Interface em guias | Visual inspirado no Mako, com L1/R1 para trocar de guia e seções que recolhem |
 | 💡 | Loja do Decky | Publicar o plugin na loja oficial |
@@ -241,8 +240,9 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 
 | Versão | Destaques |
 |:---:|---|
+| **1.7.12** | Cruz e Losango corrigidos · modelo # removido · seleção das listas mais segura |
 | **1.7.11** | Roadmap e histórico atualizados |
-| **1.7.10** | **Resolução automática** pelo ID do aparelho · 8 modelos novos de mira (15 no total) |
+| **1.7.10** | **Resolução automática** pelo ID do aparelho · 7 modelos novos de mira (14 no total) |
 | **1.7.9** | **Opacidade** de 10% a 100% · **contorno** com cor e espessura · salvos em cada perfil |
 | **1.7.8** | Barra **Ajuda** só por toque · botões de perfil mais separados · sem ✓ nas guias e nos tamanhos · foco mais discreto · roadmap atualizado |
 | **1.7.7** | Novo visual das guias e do resumo (guia ativa em azul claro, status em amarelo) · barra **Ajuda** que explica cada guia · cartão de resumo logo abaixo da barra |

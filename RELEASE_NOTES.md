@@ -1,4 +1,5 @@
-## Crosshair v1.7.11
+## Crosshair v1.7.12
 
-- Roadmap dos READMEs atualizado: resolução automática e mais modelos concluídos.
-- Histórico de versões dos READMEs atualizado (1.7.9 a 1.7.11), em português, inglês e espanhol.
+- Cruz, Cruz vazada e Losango corrigidos: as linhas de cima e de baixo agora ficam alinhadas ao centro.
+- Modelo Jogo da velha (#) removido. São 14 modelos.
+- Seleção das listas: uma resposta antiga do backend não desfaz mais a escolha mais recente.

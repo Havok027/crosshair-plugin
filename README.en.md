@@ -23,7 +23,7 @@
 
 | Feature | What it does |
 |---|---|
-| **15 crosshair styles** | Box, Dot, Ring, X, Star, Brackets, Dashes, Cross, Open cross, Diamond, Parentheses, Angles, Arrows, Ring with cross and #, selected from a dropdown |
+| **14 crosshair styles** | Box, Dot, Ring, X, Star, Brackets, Dashes, Cross, Open cross, Diamond, Parentheses, Angles, Arrows, Ring with cross, selected from a dropdown |
 | **Colors and size** | 8 presets, custom RGB and scaling from 50% to 300% |
 | **Scaling from the center** | The crosshair grows around its center, with optional calibration |
 | **Controller shortcut** | Record 2 buttons to toggle the crosshair without opening the menu |
@@ -112,7 +112,6 @@ The input reader preserves press and release events that arrive together, includ
 | Angles | `< + >` | Angled frame |
 | Arrows | `>+<` | Points to the center |
 | Ring with cross | `(+)` | Compact |
-| Hash | `#` | Discreet |
 
 | Color | Hex | Color | Hex |
 |---|---|---|---|
@@ -193,8 +192,9 @@ Logs: `~/homebrew/logs/Crosshair/`.
 
 | Version | Highlights |
 |:---:|---|
+| **1.7.12** | Cross and Diamond fixed · # style removed · safer list selection |
 | **1.7.11** | Roadmap and history updated |
-| **1.7.10** | **Automatic resolution** by device ID · 8 new crosshair styles (15 in total) |
+| **1.7.10** | **Automatic resolution** by device ID · 7 new crosshair styles (14 in total) |
 | **1.7.9** | **Opacity** from 10% to 100% · **outline** with color and thickness · saved in each profile |
 | **1.7.8** | **Help** bar by touch only · more space between the profile buttons · no ✓ on tabs and sizes · subtler focus · roadmap updated |
 | **1.7.7** | New look for the tabs and summary card (active tab in light blue, status in yellow) · **Help** bar that explains each tab · summary card right below the bar |

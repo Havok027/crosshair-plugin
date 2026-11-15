@@ -23,7 +23,7 @@
 
 | Función | Qué hace |
 |---|---|
-| **15 modelos de mira** | Caja, Punto, Anillo, X, Estrella, Corchetes, Guiones, Cruz, Cruz abierta, Rombo, Paréntesis, Ángulos, Flechas, Anillo con cruz y #, en una lista desplegable |
+| **14 modelos de mira** | Caja, Punto, Anillo, X, Estrella, Corchetes, Guiones, Cruz, Cruz abierta, Rombo, Paréntesis, Ángulos, Flechas, Anillo con cruz, en una lista desplegable |
 | **Colores y tamaño** | 8 colores predefinidos, RGB personalizado y escala del 50% al 300% |
 | **Escala desde el centro** | La mira crece desde su centro, con calibración opcional |
 | **Atajo del mando** | Graba 2 botones para activar o desactivar la mira sin abrir el menú |
@@ -112,7 +112,6 @@ La lectura conserva los eventos de pulsación y liberación que llegan juntos, i
 | Ángulos | `< + >` | Marco en ángulo |
 | Flechas | `>+<` | Apuntan al centro |
 | Anillo con cruz | `(+)` | Compacta |
-| Almohadilla | `#` | Discreta |
 
 | Color | Código | Color | Código |
 |---|---|---|---|
@@ -174,7 +173,7 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Estado | Elemento |
 |:---:|---|
-| ✅ | Legion Go S, colores, tamaño y 15 modelos |
+| ✅ | Legion Go S, colores, tamaño y 14 modelos |
 | ✅ | Perfiles por juego y escala desde el centro |
 | ✅ | Grabación del mando, lectura en el juego y restauración de MangoHud |
 | ✅ | Versiones automáticas y Direct Updater |
@@ -193,8 +192,9 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Versión | Novedades |
 |:---:|---|
+| **1.7.12** | Cruz y Rombo corregidos · modelo # eliminado · selección de listas más segura |
 | **1.7.11** | Hoja de ruta e historial actualizados |
-| **1.7.10** | **Resolución automática** por ID del dispositivo · 8 modelos nuevos de mira (15 en total) |
+| **1.7.10** | **Resolución automática** por ID del dispositivo · 7 modelos nuevos de mira (14 en total) |
 | **1.7.9** | **Opacidad** del 10% al 100% · **contorno** con color y grosor · guardados en cada perfil |
 | **1.7.8** | Barra **Ayuda** solo con el toque · más espacio entre los botones de perfil · sin ✓ en pestañas y tamaños · foco más discreto · hoja de ruta actualizada |
 | **1.7.7** | Nuevo aspecto de las pestañas y del resumen (pestaña activa en azul claro, estado en amarillo) · barra **Ayuda** que explica cada pestaña · tarjeta de resumen justo debajo de la barra |

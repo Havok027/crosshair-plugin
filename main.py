@@ -39,14 +39,15 @@ MODELS = {
     "star": {"label": "Estrela (*)", "lines": [" ", "*", " "], "half_w": 7},
     "bracket": {"label": "Colchetes", "lines": [" ", "[ + ]", " "], "half_w": 22},
     "dash": {"label": "Traços", "lines": [" ", "- + -", " "], "half_w": 23},
-    "cross": {"label": "Cruz (|)", "lines": [" | ", "-+-", " | "], "half_w": 15},
-    "gap_cross": {"label": "Cruz vazada", "lines": [" | ", "- -", " | "], "half_w": 15},
-    "diamond": {"label": "Losango", "lines": ["  ^  ", "<   >", "  v  "], "half_w": 22},
+    # O MangoHud apaga os espaços do começo de cada linha. Nos modelos que precisam
+    # de recuo, ele é feito com espaço não separável (U+00A0), que não é apagado.
+    "cross": {"label": "Cruz (|)", "lines": ["\u00a0|", "-+-", "\u00a0|"], "half_w": 15},
+    "gap_cross": {"label": "Cruz vazada", "lines": ["\u00a0|", "- -", "\u00a0|"], "half_w": 15},
+    "diamond": {"label": "Losango", "lines": ["\u00a0\u00a0^", "<   >", "\u00a0\u00a0v"], "half_w": 22},
     "paren": {"label": "Parênteses", "lines": [" ", "( + )", " "], "half_w": 22},
     "angle": {"label": "Ângulos", "lines": [" ", "< + >", " "], "half_w": 22},
     "arrows": {"label": "Setas", "lines": [" ", ">+<", " "], "half_w": 15},
     "ring_plus": {"label": "Anel com cruz", "lines": [" ", "(+)", " "], "half_w": 15},
-    "hash": {"label": "Jogo da velha (#)", "lines": [" ", "#", " "], "half_w": 9},
 }
 
 # Marca no fim do arquivo do MangoHud que foi o plugin quem o escreveu. Assim ele
