@@ -166,7 +166,7 @@ export function RenameProfileModal(props: {
   );
 }
 
-// Janela de ajuda da guia (botão Ajuda / Y). Recebe os textos já traduzidos.
+// Janela de ajuda da guia (barra Ajuda, por toque). Recebe os textos já traduzidos.
 export function HelpModal(props: { title: string; text: string; closeText: string; closeModal?: () => void }) {
   return (
     <ConfirmModal
