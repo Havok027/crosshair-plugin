@@ -181,7 +181,7 @@ test("L1/R1 cycle the three tabs, retain focus, persist selection, and stay idle
 });
 
 function mountContent({ game = null, profiles = [], language = "en" } = {}) {
-  let state = { settings: { language, model: "box", color: "FF007B", size: 100, resolution: "deck" },
+  let state = { settings: { language, model: "box", color: "FF007B", size: 100, opacity: 100, outline: false, outline_color: "000000", outline_width: 2, resolution: "deck" },
     models: [{ id: "box" }], resolutions: [{ id: "deck", label: "Deck" }], profiles, hotkey: { buttons: [] }, offset_x: 1, offset_y: 2 };
   const cleanups = [], updates = [], calls = [], modals = [];
   let hook = 0;
@@ -205,7 +205,7 @@ function mountContent({ game = null, profiles = [], language = "en" } = {}) {
       RenameProfileModal: "RenameProfileModal", SettingsSection: "Section", ShortcutTable: "ShortcutTable", SizeChips: "SizeChips",
       StatusTable: "StatusTable" },
     "./hotkey": { applyHotkeyState() {} }, "./i18n": i18n, "./SettingsTabs": { TabbedSettings: "Tabs" },
-    "./styles": { STYLES: "" }, "./utils": { COLORS: [{ hex: "FF007B" }], getRunningGame: () => game, hexToRgb: () => [255, 0, 123] },
+    "./styles": { STYLES: "" }, "./utils": { COLORS: [{ name: "Rosa", hex: "FF007B" }], getRunningGame: () => game, hexToRgb: () => [255, 0, 123] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" }, setTimeout: () => 1, clearTimeout() {} },
     localStorage: { getItem: () => null, setItem() {} } });
   return { content, cleanups, updates, calls, modals, get state() { return state; } };
@@ -251,8 +251,8 @@ test("shortcut settings live in the Settings tab only", async () => {
   assert.equal(collect(tree, "settings", isCard).length, 1);
 });
 
-const PROFILE_A = { appid: "10", name: "Mine", enabled: true, model: "box", color: "FF007B", size: 100, nudge_x: 0, nudge_y: 0 };
-const PROFILE_B = { appid: "20", name: "Other", enabled: false, model: "box", color: "00FF00", size: 150, nudge_x: 3, nudge_y: -2 };
+const PROFILE_A = { appid: "10", name: "Mine", enabled: true, model: "box", color: "FF007B", size: 100, opacity: 100, outline: false, outline_color: "000000", outline_width: 2, nudge_x: 0, nudge_y: 0 };
+const PROFILE_B = { appid: "20", name: "Other", enabled: false, model: "box", color: "00FF00", size: 150, opacity: 60, outline: true, outline_color: "FFFFFF", outline_width: 3, nudge_x: 3, nudge_y: -2 };
 
 test("profile buttons create, rename and delete the selected game profile", async () => {
   const game = { appid: "10", name: "Game" };
@@ -345,7 +345,7 @@ test("profile table compares the saved profile with the current settings", () =>
     "./utils": { COLORS: [], SIZE_PRESETS: [] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } } });
   const text = (node) => JSON.stringify(node);
-  const settings = { enabled: true, model: "box", color: "ff007b", size: 100, nudge_x: 0, nudge_y: 0, auto_apply: true, language: "en" };
+  const settings = { enabled: true, model: "box", color: "ff007b", size: 100, opacity: 100, outline: false, outline_color: "000000", outline_width: 2, nudge_x: 0, nudge_y: 0, auto_apply: true, language: "en" };
   const same = components.ProfileTable({ profile: PROFILE_A, settings, modelLabel: "Box", gameOpen: true });
   assert.match(text(same), /Same as current settings/);
   assert.match(text(same), /Game open/);
@@ -356,4 +356,99 @@ test("profile table compares the saved profile with the current settings", () =>
   assert.match(text(shortcut), /B35 \+ B2/);
   assert.match(text(shortcut), /150 ms/);
   assert.match(text(shortcut), /Shortcut on/);
+});
+
+test("selected state is visible on tabs, size chips and section bars, apart from focus", () => {
+  const createElement = (type, props, ...children) => ({ type, props: { ...props, children } });
+  let stored = "1";
+  const components = load("components.tsx", {
+    react: { useState: (initial) => [typeof initial === "function" ? initial() : initial, () => {}] },
+    "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
+      PanelSectionRow: "Row", TextField: "TextField" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "./hotkey": { buttonName: () => "?" }, "./i18n": { useTranslation: () => (key) => key }, "./utils": { COLORS: [], SIZE_PRESETS: [50, 100, 150] },
+  }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } },
+    localStorage: { getItem: () => stored, setItem() {} } });
+  const find = (tree, match) => collect(tree, null, match);
+
+  const closed = find(components.FoldSection({ id: "a", title: "A", children: "BODY" }), (n) => n.type === "DialogButton");
+  assert.match(closed[0].props.className, /xh-fold xh-closed/);
+  stored = "0";
+  const open = find(components.FoldSection({ id: "b", title: "B", children: "BODY" }), (n) => n.type === "DialogButton");
+  assert.match(open[0].props.className, /xh-fold xh-open/);
+
+  const chips = find(components.SizeChips({ value: 100, onSelect() {} }), (n) => /\bxh-size\b/.test(n.props.className ?? ""));
+  assert.deepEqual(chips.map((c) => c.props["aria-pressed"]), [false, true, false]);
+  assert.deepEqual(chips.map((c) => /xh-active/.test(c.props.className)), [false, true, false]);
+});
+
+test("styles give selected and focused controls different looks", () => {
+  const { STYLES } = load("styles.ts", {});
+  for (const needle of [
+    ".xh-tab.xh-selected", ".xh-tab.gpfocus", ".xh-size.xh-active", ".xh-size.gpfocus",
+    ".xh-fold.xh-closed", ".xh-fold.xh-open", ".xh-act.gpfocus", ".xh-fold.gpfocus",
+  ]) assert.ok(STYLES.includes(needle), needle);
+  assert.ok(!STYLES.includes(".xh-tab.xh-selected::after"));
+  assert.ok(!STYLES.includes(".xh-size.xh-active::before"));
+  assert.ok(!STYLES.includes("✓"));
+});
+
+test("Help bar opens the help of the active tab by touch only, never with Y", () => {
+  const nav = { current: {} };
+  const helped = [];
+  let capturing = false;
+  const createElement = (type, props, ...children) => ({ type, props: { ...props, children } });
+  const tabs = load("SettingsTabs.tsx", {
+    react: { useRef: () => nav, useState: (initial) => [initial(), () => {}] },
+    "@decky/ui": { Focusable: "Focusable", PanelSection: "Section", PanelSectionRow: "Row",
+      GamepadButton: { BUMPER_LEFT: 5, BUMPER_RIGHT: 6, SECONDARY: 3 } },
+    "react-icons/fa": { FaBullseye: "Icon", FaLayerGroup: "Icon", FaCog: "Icon" },
+    "./i18n": { useTranslation: () => i18n.translator("en") },
+  }, { window: { SP_REACT: { createElement } }, localStorage: { getItem: () => "profiles", setItem() {} } });
+  const render = () => tabs.TabbedSettings({ capturing, children: () => null, onHelp: (tab) => helped.push(tab) });
+  const findBar = () => collect(render(), null, (n) => /(^|\s)xh-help(\s|$)/.test(n.props.className ?? ""));
+
+  render().props.onButtonDown({ detail: { button: 3 }, stopPropagation() {}, preventDefault() {} });
+  assert.equal(helped.length, 0);
+
+  const [bar] = findBar();
+  assert.equal(bar.props.onActivate, undefined);
+  bar.props.onClick();
+  assert.deepEqual(helped, ["profiles"]);
+
+  capturing = true;
+  findBar()[0].props.onClick();
+  assert.equal(helped.length, 1);
+});
+
+test("opacity and outline controls: outline options appear only when the outline is on", () => {
+  const find = (tree, label) => collect(tree, "appearance", (n) => n.props.label === label);
+  const off = mountContent(); const offTree = off.content.Content();
+  return Promise.resolve().then(() => {
+    assert.equal(find(offTree, "Opacity").length, 1);
+    assert.equal(find(offTree, "Outline").length, 1);
+    assert.equal(find(offTree, "Outline color").length, 0);
+    assert.equal(find(offTree, "Outline thickness").length, 0);
+    const [opacity] = find(offTree, "Opacity");
+    assert.equal(opacity.props.min, 10); assert.equal(opacity.props.max, 100);
+  });
+});
+
+test("profile table notices a different opacity or outline", () => {
+  const createElement = (type, props, ...children) => ({ type, props: { ...props, children } });
+  const components = load("components.tsx", {
+    react: { useState: (initial) => [initial, () => {}] },
+    "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
+      PanelSectionRow: "Row", TextField: "TextField" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "./hotkey": { buttonName: (id) => "B" + id }, "./i18n": { useTranslation: () => i18n.translator("en") },
+    "./utils": { COLORS: [], SIZE_PRESETS: [] },
+  }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } } });
+  const text = (node) => JSON.stringify(node);
+  const settings = { ...PROFILE_A, color: "FF007B", auto_apply: true, language: "en" };
+  assert.match(text(components.ProfileTable({ profile: PROFILE_A, settings, modelLabel: "Box", gameOpen: false })), /Same as current settings/);
+  const dim = components.ProfileTable({ profile: { ...PROFILE_A, opacity: 50 }, settings, modelLabel: "Box", gameOpen: false });
+  assert.match(text(dim), /Differs from current settings/); assert.match(text(dim), /50%/);
+  const outlined = components.ProfileTable({ profile: { ...PROFILE_A, outline: true }, settings, modelLabel: "Box", gameOpen: false });
+  assert.match(text(outlined), /Differs from current settings/);
 });

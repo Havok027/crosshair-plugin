@@ -22,9 +22,10 @@ import {
   updateSettings,
 } from "./api";
 import type { GameInfo, PluginState, Settings } from "./api";
-import { ColorStrip, FoldSection, HotkeyCard, ProfileTable, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
+import { ColorStrip, FoldSection, HelpModal, HotkeyCard, ProfileTable, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
 import { applyHotkeyState, captureButtons } from "./hotkey";
 import { LanguageContext, modelLabel, translator } from "./i18n";
+import type { MessageKey } from "./i18n";
 import { TabbedSettings } from "./SettingsTabs";
 import { STYLES } from "./styles";
 import { COLORS, getRunningGame, hexToRgb, rgbToHex } from "./utils";
@@ -195,8 +196,14 @@ export function Content() {
       <div className="xh-plugin">
         <style>{STYLES}</style>
 
-        <TabbedSettings capturing={capturing} header={(tab) => tab === "appearance" ? (
-          <SettingsSection title={t("Estado atual")}>
+        <TabbedSettings
+          capturing={capturing}
+          onHelp={(tab) => {
+            const key = tab === "appearance" ? "help_appearance" : tab === "profiles" ? "help_profiles" : "help_settings";
+            showModal(<HelpModal title={t("Ajuda")} text={t(key)} closeText={t("Fechar")} />);
+          }}
+          header={(tab) => tab === "appearance" ? (
+          <SettingsSection>
             <PanelSectionRow>
               <StatusTable
                 settings={settings}
@@ -216,7 +223,7 @@ export function Content() {
             </PanelSectionRow>
           </SettingsSection>
         ) : tab === "profiles" ? (
-          <SettingsSection title={t("Detalhes do perfil")}>
+          <SettingsSection>
             <PanelSectionRow>
               {selectedProfile ? (
                 <ProfileTable
@@ -233,7 +240,7 @@ export function Content() {
             </PanelSectionRow>
           </SettingsSection>
         ) : (
-          <SettingsSection title={t("Resumo")}>
+          <SettingsSection>
             <PanelSectionRow>
               <ShortcutTable settings={settings} hotkey={hotkey} />
             </PanelSectionRow>
@@ -321,6 +328,48 @@ export function Content() {
                   onChange={(v: number) => patchSettings({ size: v })}
                 />
               </PanelSectionRow>
+              <PanelSectionRow>
+                <SliderField
+                  label={t("Opacidade")}
+                  value={settings.opacity}
+                  min={10}
+                  max={100}
+                  step={5}
+                  showValue
+                  valueSuffix="%"
+                  onChange={(v: number) => patchSettings({ opacity: v })}
+                />
+              </PanelSectionRow>
+              <PanelSectionRow>
+                <ToggleField
+                  label={t("Contorno")}
+                  checked={settings.outline}
+                  onChange={(value: boolean) => patchSettings({ outline: value })}
+                />
+              </PanelSectionRow>
+              {settings.outline && (
+                <>
+                  <PanelSectionRow>
+                    <DropdownItem
+                      label={t("Cor do contorno")}
+                      rgOptions={[{ data: "000000", label: t("Preto") }, ...COLORS.map((c) => ({ data: c.hex, label: t(c.name as MessageKey) }))]}
+                      selectedOption={settings.outline_color}
+                      onChange={(option: { data: string }) => patchSettings({ outline_color: option.data })}
+                    />
+                  </PanelSectionRow>
+                  <PanelSectionRow>
+                    <SliderField
+                      label={t("Espessura do contorno")}
+                      value={settings.outline_width}
+                      min={1}
+                      max={5}
+                      step={1}
+                      showValue
+                      onChange={(v: number) => patchSettings({ outline_width: v })}
+                    />
+                  </PanelSectionRow>
+                </>
+              )}
             </FoldSection>
 
             <FoldSection id="display" title={t("Tela e posição")}>

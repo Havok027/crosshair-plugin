@@ -8,10 +8,10 @@ import { useTranslation } from "./i18n";
 import type { MessageKey, Translate } from "./i18n";
 import { COLORS, SIZE_PRESETS } from "./utils";
 
-export function SettingsSection({ title, children }: { title: string; children: ReactNode }) {
+export function SettingsSection({ title, children }: { title?: string; children: ReactNode }) {
   return (
     <PanelSection>
-      <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow>
+      {title ? <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow> : null}
       {children}
     </PanelSection>
   );
@@ -31,7 +31,7 @@ export function FoldSection({ id, title, children }: { id: string; title: string
     <PanelSection>
       <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow>
       <PanelSectionRow>
-        <DialogButton className="xh-fold" onClick={toggle} aria-expanded={!folded}>
+        <DialogButton className={"xh-fold" + (folded ? " xh-closed" : " xh-open")} onClick={toggle} aria-expanded={!folded}>
           {folded ? <FaChevronDown /> : <FaChevronUp />}
         </DialogButton>
       </PanelSectionRow>
@@ -53,6 +53,14 @@ function InfoTable(props: { head: string; on: boolean; rows: { label: string; va
       ))}
     </div>
   );
+}
+
+function outlineText(
+  look: { outline: boolean; outline_color: string; outline_width: number },
+  t: Translate,
+): ReactNode {
+  if (!look.outline) return t("Desligado");
+  return <><span className="xh-dot xh-tdot" style={{ background: "#" + look.outline_color }} />{look.outline_width}</>;
 }
 
 function ColorValue({ hex }: { hex: string }) {
@@ -77,6 +85,8 @@ export function StatusTable(props: {
         { label: t("Modelo"), value: props.modelLabel },
         { label: t("Tamanho"), value: settings.size + "%" },
         { label: t("Cor"), value: <ColorValue hex={settings.color} /> },
+        { label: t("Opacidade"), value: settings.opacity + "%" },
+        { label: t("Contorno"), value: outlineText(settings, t) },
         { label: t("Resolução"), value: props.resolutionLabel },
         { label: t("Posição"), value: props.offsetX + ", " + props.offsetY },
       ]}
@@ -98,6 +108,9 @@ export function ProfileTable(props: {
     profile.model === settings.model &&
     profile.size === settings.size &&
     profile.color.toUpperCase() === settings.color.toUpperCase() &&
+    profile.opacity === settings.opacity &&
+    profile.outline === settings.outline &&
+    (!profile.outline || (profile.outline_color === settings.outline_color && profile.outline_width === settings.outline_width)) &&
     profile.nudge_x === settings.nudge_x &&
     profile.nudge_y === settings.nudge_y;
   return (
@@ -108,6 +121,8 @@ export function ProfileTable(props: {
         { label: t("Modelo"), value: props.modelLabel },
         { label: t("Tamanho"), value: profile.size + "%" },
         { label: t("Cor"), value: <ColorValue hex={profile.color} /> },
+        { label: t("Opacidade"), value: profile.opacity + "%" },
+        { label: t("Contorno"), value: outlineText(profile, t) },
         { label: t("Posição"), value: profile.nudge_x + ", " + profile.nudge_y },
         { label: t("Mira ao aplicar"), value: profile.enabled ? t("Ativo") : t("Desligado") },
         { label: t("Aplicação automática"), value: settings.auto_apply ? t("Ativo") : t("Desligado") },
@@ -166,6 +181,19 @@ export function RenameProfileModal(props: {
   );
 }
 
+// Janela de ajuda da guia (barra Ajuda, por toque). Recebe os textos já traduzidos.
+export function HelpModal(props: { title: string; text: string; closeText: string; closeModal?: () => void }) {
+  return (
+    <ConfirmModal
+      bAlertDialog
+      strTitle={props.title}
+      strDescription={props.text}
+      strOKButtonText={props.closeText}
+      closeModal={props.closeModal}
+    />
+  );
+}
+
 // Carrossel de cores: a cor escolhida fica sempre no centro. Quem muda a cor é o
 // slider logo abaixo (esquerda/direita), então aqui é só visual e também aceita toque.
 export function ColorStrip(props: { value: string; onSelect: (hex: string) => void }) {
@@ -212,6 +240,7 @@ export function SizeChips(props: { value: number; onSelect: (size: number) => vo
         <Focusable
           key={size}
           className={"xh-size" + (props.value === size ? " xh-active" : "")}
+          aria-pressed={props.value === size}
           onActivate={() => props.onSelect(size)}
         >
           {size}%

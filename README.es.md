@@ -172,10 +172,9 @@ Registros: `~/homebrew/logs/Crosshair/`.
 | ✅ | Versiones automáticas y Direct Updater |
 | ✅ | Documentación e interfaz en portugués, inglés y español |
 | ✅ | Pestañas inspiradas en Mako, con L1/R1 para cambiar de pestaña y secciones que se contraen |
-| 🔄 | Validar LB, RB, LT, RT, Menu y View en el juego |
-| 🧭 | L3/R3 y botones traseros de mandos que no sean de Valve |
+| ✅ | Validar LB, RB, LT, RT, Menu y View en el juego |
 | 🧭 | Calibración automática del centrado |
-| 💡 | Opacidad y contorno |
+| ✅ | Opacidad y contorno |
 | 💡 | Detección automática de resolución |
 | 💡 | Más modelos de mira |
 | 💡 | Publicación en la tienda oficial de Decky |
@@ -186,6 +185,9 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Versión | Novedades |
 |:---:|---|
+| **1.7.8** | Barra **Ayuda** solo con el toque · más espacio entre los botones de perfil · sin ✓ en pestañas y tamaños · foco más discreto · hoja de ruta actualizada |
+| **1.7.7** | Nuevo aspecto de las pestañas y del resumen (pestaña activa en azul claro, estado en amarillo) · barra **Ayuda** que explica cada pestaña · tarjeta de resumen justo debajo de la barra |
+| **1.7.6** | Selección clara en todas las pestañas: pestaña activa con marca y resalte propio, tamaño elegido con ✓, barras de sección abiertas o cerradas y foco visible en todos los botones |
 | **1.7.5** | Apariencia y Pantalla en una pestaña; secciones que se contraen con flecha; una tabla resumen distinta en cada pestaña, con los detalles del perfil; pestaña **Perfiles** con crear, renombrar y eliminar; atajo dentro de **Ajustes** |
 | **1.7.3** | Pestañas arriba con icono y nombre debajo; nueva pestaña **Ajustes** con el idioma; perfil del juego al final de **Apariencia** |
 | **1.7.2** | Portugués, inglés y español; pestañas con L1/R1; corrección de pulsaciones rápidas de A/B/X/Y |
