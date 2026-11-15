@@ -55,6 +55,14 @@ function InfoTable(props: { head: string; on: boolean; rows: { label: string; va
   );
 }
 
+function outlineText(
+  look: { outline: boolean; outline_color: string; outline_width: number },
+  t: Translate,
+): ReactNode {
+  if (!look.outline) return t("Desligado");
+  return <><span className="xh-dot xh-tdot" style={{ background: "#" + look.outline_color }} />{look.outline_width}</>;
+}
+
 function ColorValue({ hex }: { hex: string }) {
   return <><span className="xh-dot xh-tdot" style={{ background: "#" + hex }} />#{hex}</>;
 }
@@ -77,6 +85,8 @@ export function StatusTable(props: {
         { label: t("Modelo"), value: props.modelLabel },
         { label: t("Tamanho"), value: settings.size + "%" },
         { label: t("Cor"), value: <ColorValue hex={settings.color} /> },
+        { label: t("Opacidade"), value: settings.opacity + "%" },
+        { label: t("Contorno"), value: outlineText(settings, t) },
         { label: t("Resolução"), value: props.resolutionLabel },
         { label: t("Posição"), value: props.offsetX + ", " + props.offsetY },
       ]}
@@ -98,6 +108,9 @@ export function ProfileTable(props: {
     profile.model === settings.model &&
     profile.size === settings.size &&
     profile.color.toUpperCase() === settings.color.toUpperCase() &&
+    profile.opacity === settings.opacity &&
+    profile.outline === settings.outline &&
+    (!profile.outline || (profile.outline_color === settings.outline_color && profile.outline_width === settings.outline_width)) &&
     profile.nudge_x === settings.nudge_x &&
     profile.nudge_y === settings.nudge_y;
   return (
@@ -108,6 +121,8 @@ export function ProfileTable(props: {
         { label: t("Modelo"), value: props.modelLabel },
         { label: t("Tamanho"), value: profile.size + "%" },
         { label: t("Cor"), value: <ColorValue hex={profile.color} /> },
+        { label: t("Opacidade"), value: profile.opacity + "%" },
+        { label: t("Contorno"), value: outlineText(profile, t) },
         { label: t("Posição"), value: profile.nudge_x + ", " + profile.nudge_y },
         { label: t("Mira ao aplicar"), value: profile.enabled ? t("Ativo") : t("Desligado") },
         { label: t("Aplicação automática"), value: settings.auto_apply ? t("Ativo") : t("Desligado") },

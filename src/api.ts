@@ -10,6 +10,10 @@ export interface Settings {
   resolution: string;
   color: string; // RRGGBB, sem "#"
   size: number; // porcentagem (50 a 300)
+  opacity: number; // opacidade da mira (10 a 100)
+  outline: boolean; // contorno ligado
+  outline_color: string; // RRGGBB, sem "#"
+  outline_width: number; // espessura do contorno (1 a 5)
   nudge_x: number;
   nudge_y: number;
   comp_x: number; // compensação de escala (calibração)
@@ -45,6 +49,10 @@ export interface ProfileInfo {
   model: string;
   color: string; // RRGGBB, sem "#"
   size: number;
+  opacity: number;
+  outline: boolean;
+  outline_color: string;
+  outline_width: number;
   nudge_x: number;
   nudge_y: number;
 }

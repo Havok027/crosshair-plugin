@@ -19,7 +19,7 @@ export const messages = {
   "Sem combinação": ["Not set", "Sin combinación"],
   "Perfil": ["Profile", "Perfil"],
   "Perfis de jogo": ["Game profiles", "Perfiles de juego"],
-  "profiles_info": ["Each profile stores the style, color, size and position of one game and is applied when that game opens. To create one, open the game and use Create profile.", "Cada perfil guarda el modelo, color, tamaño y posición de un juego y se aplica al abrirlo. Para crear uno, abre el juego y usa Crear perfil."],
+  "profiles_info": ["Each profile stores the style, color, size, opacity, outline and position of one game and is applied when that game opens. To create one, open the game and use Create profile.", "Cada perfil guarda el modelo, color, tamaño, opacidad, contorno y posición de un juego y se aplica al abrirlo. Para crear uno, abre el juego y usa Crear perfil."],
   "Perfis salvos": ["Saved profiles", "Perfiles guardados"],
   "Nenhum perfil salvo": ["No saved profiles", "Ningún perfil guardado"],
   "Abra um jogo para salvar seu perfil": ["Open a game to save its profile", "Abre un juego para guardar su perfil"],
@@ -70,6 +70,11 @@ export const messages = {
   "Branco": ["White", "Blanco"],
   "Personalizada": ["Custom", "Personalizado"],
   "Tamanho": ["Size", "Tamaño"],
+  "Opacidade": ["Opacity", "Opacidad"],
+  "Contorno": ["Outline", "Contorno"],
+  "Cor do contorno": ["Outline color", "Color del contorno"],
+  "Espessura do contorno": ["Outline thickness", "Grosor del contorno"],
+  "Preto": ["Black", "Negro"],
   "Tela e posição": ["Display and position", "Pantalla y posición"],
   "Resolução da tela": ["Display resolution", "Resolución de pantalla"],
   "Horizontal (X)": ["Horizontal (X)", "Horizontal (X)"],
@@ -135,7 +140,7 @@ export const messages = {
   "Guia": ["Guide", "Guía"],
   "Ajuda": ["Help", "Ayuda"],
   "Fechar": ["Close", "Cerrar"],
-  "help_appearance": ["Pick the crosshair style, size and color. The card shows how it looks now. Under Display and position, adjust the center if the crosshair is not in the middle of the screen.", "Elige el modelo, tamaño y color de la mira. La tarjeta muestra cómo está ahora. En Pantalla y posición, ajusta el centro si la mira no queda en medio de la pantalla."],
+  "help_appearance": ["Pick the crosshair style, size, color, opacity and outline. The card shows how it looks now. Under Display and position, adjust the center if the crosshair is not in the middle of the screen.", "Elige el modelo, tamaño, color, opacidad y contorno de la mira. La tarjeta muestra cómo está ahora. En Pantalla y posición, ajusta el centro si la mira no queda en medio de la pantalla."],
   "help_profiles": ["Each profile stores the crosshair of one game and turns on by itself when that game opens. Open the game to create a profile, then update, rename or delete it with the buttons.", "Cada perfil guarda la mira de un juego y se activa solo al abrirlo. Abre el juego para crear un perfil y luego actualízalo, renómbralo o elimínalo con los botones."],
   "help_settings": ["Language and controller shortcut live here. Record two buttons and hold them in game to show or hide the crosshair.", "Aquí están el idioma y el atajo del mando. Graba dos botones y mantenlos pulsados en el juego para mostrar u ocultar la mira."],
 } as const;
@@ -145,7 +150,7 @@ export type Translate = (key: MessageKey, values?: Record<string, string | numbe
 
 const portuguese: Partial<Record<MessageKey, string>> = {
   calibration_steps: "1) Deixe o tamanho em 100% e centralize a mira com Horizontal e Vertical. 2) Suba o tamanho para 300%. 3) Se a mira saiu do centro, ajuste a compensação até ela voltar. Se ao crescer ela sobe ou vai para a esquerda, aumente. Se desce ou vai para a direita, diminua. A calibração vale para o modelo atual.",
-  profile_hint: "Abra este menu com um jogo rodando para salvar um perfil só para ele (modelo, cor, tamanho e posição).",
+  profile_hint: "Abra este menu com um jogo rodando para salvar um perfil só para ele (modelo, cor, tamanho, opacidade, contorno e posição).",
   overlay_hint: "O plugin usa o texto do MangoHud como mira, então não dá para ter o overlay de desempenho ao mesmo tempo. Desligue a mira para restaurar o MangoHud anterior.",
   reading_both: "Lendo pela interface do Steam e em jogo ({count} controle(s)).",
   reading_unsupported: "Esta combinação só funciona com o menu do Steam em foco. Para usar em jogo, grave outra com A, B, X, Y, direcional, LB, RB, LT, RT, Menu ou View.",
@@ -154,7 +159,7 @@ const portuguese: Partial<Record<MessageKey, string>> = {
   empty_shortcut: "Nenhuma combinação gravada. Toque em Gravar combinação.",
   age_seconds: ", há {count} s",
   permission_denied: "Sem permissão para ler {count} controle(s).",
-  help_appearance: "Escolha modelo, tamanho e cor da mira. O cartão mostra como ela está agora. Em Tela e posição, ajuste o centro se a mira não ficar no meio da tela.",
+  help_appearance: "Escolha modelo, tamanho, cor, opacidade e contorno da mira. O cartão mostra como ela está agora. Em Tela e posição, ajuste o centro se a mira não ficar no meio da tela.",
   help_profiles: "Cada perfil guarda a mira de um jogo e liga sozinho quando esse jogo abre. Abra o jogo para criar um perfil e depois atualize, renomeie ou exclua pelos botões.",
   help_settings: "Aqui ficam o idioma e o atalho de botões. Grave dois botões e segure-os no jogo para mostrar ou esconder a mira.",
 };
