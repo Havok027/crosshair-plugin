@@ -390,3 +390,40 @@ test("styles give selected and focused controls different looks", () => {
     ".xh-fold.xh-closed", ".xh-fold.xh-open", ".xh-act.gpfocus", ".xh-fold.gpfocus",
   ]) assert.ok(STYLES.includes(needle), needle);
 });
+
+test("Help (Y) opens the help of the active tab from the Y button and from the bar", () => {
+  const nav = { current: {} };
+  const helped = [];
+  let capturing = false, stopped = 0;
+  const createElement = (type, props, ...children) => ({ type, props: { ...props, children } });
+  const tabs = load("SettingsTabs.tsx", {
+    react: { useRef: () => nav, useState: (initial) => [initial(), () => {}] },
+    "@decky/ui": { Focusable: "Focusable", PanelSection: "Section", PanelSectionRow: "Row",
+      GamepadButton: { BUMPER_LEFT: 5, BUMPER_RIGHT: 6, SECONDARY: 3 } },
+    "react-icons/fa": { FaBullseye: "Icon", FaLayerGroup: "Icon", FaCog: "Icon" },
+    "./i18n": { useTranslation: () => i18n.translator("en") },
+  }, { window: { SP_REACT: { createElement } }, localStorage: { getItem: () => "profiles", setItem() {} } });
+  const render = () => tabs.TabbedSettings({ capturing, children: () => null, onHelp: (tab) => helped.push(tab) });
+  const press = (detail) => render().props.onButtonDown({ detail, stopPropagation() { stopped++; }, preventDefault() {} });
+
+  press({ button: 3 });
+  assert.deepEqual(helped, ["profiles"]);
+  assert.equal(stopped, 1);
+  press({ button: 3, is_repeat: true });
+  assert.equal(helped.length, 1);
+  capturing = true;
+  press({ button: 3 });
+  assert.equal(helped.length, 1);
+  capturing = false;
+
+  const bar = collect(render(), null, (n) => /(^|\s)xh-help(\s|$)/.test(n.props.className ?? ""));
+  assert.equal(bar.length, 1);
+  bar[0].props.onActivate();
+  bar[0].props.onClick();
+  assert.deepEqual(helped, ["profiles", "profiles", "profiles"]);
+  capturing = true;
+  const idleBar = collect(render(), null, (n) => /(^|\s)xh-help(\s|$)/.test(n.props.className ?? ""));
+  idleBar[0].props.onActivate();
+  idleBar[0].props.onClick();
+  assert.equal(helped.length, 3);
+});

@@ -9,7 +9,10 @@ export type TabId = typeof tabs[number];
 type NavigationHandle = { TakeFocus: () => boolean };
 const TabFocus = Focusable as ComponentType<ComponentProps<typeof Focusable> & { navRef?: Ref<NavigationHandle> }>;
 
-export function TabbedSettings({ children, capturing, header }: { children: (tab: TabId) => ReactNode; capturing: boolean; header?: (tab: TabId) => ReactNode }) {
+// Botão Y no Steam (ação secundária); abre a ajuda da guia.
+const HELP_BUTTON = GamepadButton.SECONDARY;
+
+export function TabbedSettings({ children, capturing, header, onHelp }: { children: (tab: TabId) => ReactNode; capturing: boolean; header?: (tab: TabId) => ReactNode; onHelp?: (tab: TabId) => void }) {
   const t = useTranslation();
   const [active, setActive] = useState<TabId>(() => {
     try {
@@ -33,6 +36,12 @@ export function TabbedSettings({ children, capturing, header }: { children: (tab
       onButtonDown={(event) => {
         if (capturing) return;
         const button = event.detail.button;
+        if (button === HELP_BUTTON) {
+          event.stopPropagation();
+          event.preventDefault();
+          if (!event.detail.is_repeat) onHelp?.(active);
+          return;
+        }
         if (button !== GamepadButton.BUMPER_LEFT && button !== GamepadButton.BUMPER_RIGHT) return;
         event.stopPropagation();
         event.preventDefault();
@@ -66,6 +75,12 @@ export function TabbedSettings({ children, capturing, header }: { children: (tab
           </Focusable>
         </PanelSectionRow>
         <PanelSectionRow><div className="xh-tab-hint">{t("L1 / R1 · trocar guia")}</div></PanelSectionRow>
+        <PanelSectionRow>
+          <Focusable className="xh-help" role="button" onActivate={() => { if (!capturing) onHelp?.(active); }} onClick={() => { if (!capturing) onHelp?.(active); }}>
+            <span className="xh-help-key" aria-hidden="true">Y</span>
+            <span>{t("Ajuda")} (Y)</span>
+          </Focusable>
+        </PanelSectionRow>
       </PanelSection>
       {header?.(active)}
       <div key={active} id={`xh-panel-${active}`} role="tabpanel" aria-labelledby={`xh-tab-${active}`} className="xh-tab-panel">

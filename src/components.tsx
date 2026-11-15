@@ -8,10 +8,10 @@ import { useTranslation } from "./i18n";
 import type { MessageKey, Translate } from "./i18n";
 import { COLORS, SIZE_PRESETS } from "./utils";
 
-export function SettingsSection({ title, children }: { title: string; children: ReactNode }) {
+export function SettingsSection({ title, children }: { title?: string; children: ReactNode }) {
   return (
     <PanelSection>
-      <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow>
+      {title ? <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow> : null}
       {children}
     </PanelSection>
   );
@@ -163,6 +163,19 @@ export function RenameProfileModal(props: {
     >
       <TextField value={value} onChange={(event) => setValue(event.target.value)} />
     </ConfirmModal>
+  );
+}
+
+// Janela de ajuda da guia (botão Ajuda / Y). Recebe os textos já traduzidos.
+export function HelpModal(props: { title: string; text: string; closeText: string; closeModal?: () => void }) {
+  return (
+    <ConfirmModal
+      bAlertDialog
+      strTitle={props.title}
+      strDescription={props.text}
+      strOKButtonText={props.closeText}
+      closeModal={props.closeModal}
+    />
   );
 }
 

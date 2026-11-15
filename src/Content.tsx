@@ -22,7 +22,7 @@ import {
   updateSettings,
 } from "./api";
 import type { GameInfo, PluginState, Settings } from "./api";
-import { ColorStrip, FoldSection, HotkeyCard, ProfileTable, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
+import { ColorStrip, FoldSection, HelpModal, HotkeyCard, ProfileTable, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
 import { applyHotkeyState, captureButtons } from "./hotkey";
 import { LanguageContext, modelLabel, translator } from "./i18n";
 import { TabbedSettings } from "./SettingsTabs";
@@ -195,8 +195,14 @@ export function Content() {
       <div className="xh-plugin">
         <style>{STYLES}</style>
 
-        <TabbedSettings capturing={capturing} header={(tab) => tab === "appearance" ? (
-          <SettingsSection title={t("Estado atual")}>
+        <TabbedSettings
+          capturing={capturing}
+          onHelp={(tab) => {
+            const key = tab === "appearance" ? "help_appearance" : tab === "profiles" ? "help_profiles" : "help_settings";
+            showModal(<HelpModal title={t("Ajuda")} text={t(key)} closeText={t("Fechar")} />);
+          }}
+          header={(tab) => tab === "appearance" ? (
+          <SettingsSection>
             <PanelSectionRow>
               <StatusTable
                 settings={settings}
@@ -216,7 +222,7 @@ export function Content() {
             </PanelSectionRow>
           </SettingsSection>
         ) : tab === "profiles" ? (
-          <SettingsSection title={t("Detalhes do perfil")}>
+          <SettingsSection>
             <PanelSectionRow>
               {selectedProfile ? (
                 <ProfileTable
@@ -233,7 +239,7 @@ export function Content() {
             </PanelSectionRow>
           </SettingsSection>
         ) : (
-          <SettingsSection title={t("Resumo")}>
+          <SettingsSection>
             <PanelSectionRow>
               <ShortcutTable settings={settings} hotkey={hotkey} />
             </PanelSectionRow>
