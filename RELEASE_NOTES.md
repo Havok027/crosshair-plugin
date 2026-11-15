@@ -1,5 +1,5 @@
-## Crosshair v1.7.12
+## Crosshair v1.7.13
 
-- Cruz, Cruz vazada e Losango corrigidos: as linhas de cima e de baixo agora ficam alinhadas ao centro.
-- Modelo Jogo da velha (#) removido. São 14 modelos.
-- Seleção das listas: uma resposta antiga do backend não desfaz mais a escolha mais recente.
+- Listas suspensas: abrir ou escolher uma opção não volta mais para a primeira aba nem fecha o QAM.
+- L1/R1 de um menu aberto não troca mais a aba do plugin.
+- Opções das listas deixam de ser recriadas a cada atualização, evitando perda de foco.

@@ -192,6 +192,7 @@ Logs: `~/homebrew/logs/Crosshair/`.
 
 | Version | Highlights |
 |:---:|---|
+| **1.7.13** | Dropdown no longer resets tab or closes the QAM |
 | **1.7.12** | Cross and Diamond fixed · # style removed · safer list selection |
 | **1.7.11** | Roadmap and history updated |
 | **1.7.10** | **Automatic resolution** by device ID · 7 new crosshair styles (14 in total) |
