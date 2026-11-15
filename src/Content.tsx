@@ -8,7 +8,7 @@ import {
   ToggleField,
   showModal,
 } from "@decky/ui";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FaGamepad, FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import {
   clearHotkey,
@@ -173,6 +173,16 @@ export function Content() {
     );
   };
 
+  const lang = state?.settings.language ?? "pt";
+  const stateModels = state?.models;
+  const stateResolutions = state?.resolutions;
+  const stateProfiles = state?.profiles;
+  const modelOptions = useMemo(() => (stateModels ?? []).map((m) => ({ data: m.id, label: modelLabel(m.id, t) })), [stateModels, lang]);
+  const outlineOptions = useMemo(() => [{ data: "000000", label: t("Preto") }, ...COLORS.map((c) => ({ data: c.hex, label: t(c.name as MessageKey) }))], [lang]);
+  const resolutionOptions = useMemo(() => (stateResolutions ?? []).map((res) => ({ data: res.id, label: res.label.replace("Monitor externo", t("Monitor externo")) })), [stateResolutions, lang]);
+  const profileOptions = useMemo(() => (stateProfiles ?? []).map((p) => ({ data: p.appid, label: p.name })), [stateProfiles]);
+  const languageOptions = useMemo(() => [{ data: "pt", label: "Português" }, { data: "en", label: "English" }, { data: "es", label: "Español" }], []);
+
   if (!state) {
     return (
       <PanelSection title="Crosshair">
@@ -256,7 +266,7 @@ export function Content() {
               <PanelSectionRow>
                 <DropdownItem
                   label={t("Modelo")}
-                  rgOptions={models.map((m) => ({ data: m.id, label: modelLabel(m.id, t) }))}
+                  rgOptions={modelOptions}
                   selectedOption={settings.model}
                   onChange={(option: { data: string }) => patchSettings({ model: option.data })}
                 />
@@ -357,7 +367,7 @@ export function Content() {
                   <PanelSectionRow>
                     <DropdownItem
                       label={t("Cor do contorno")}
-                      rgOptions={[{ data: "000000", label: t("Preto") }, ...COLORS.map((c) => ({ data: c.hex, label: t(c.name as MessageKey) }))]}
+                      rgOptions={outlineOptions}
                       selectedOption={settings.outline_color}
                       onChange={(option: { data: string }) => patchSettings({ outline_color: option.data })}
                     />
@@ -389,7 +399,7 @@ export function Content() {
               <PanelSectionRow>
                 <DropdownItem
                   label={t("Resolução da tela")}
-                  rgOptions={resolutions.map((res) => ({ data: res.id, label: res.label.replace("Monitor externo", t("Monitor externo")) }))}
+                  rgOptions={resolutionOptions}
                   selectedOption={settings.resolution}
                   onChange={(option: { data: string }) => patchSettings({ resolution: option.data })}
                 />
@@ -501,7 +511,7 @@ export function Content() {
                 {profiles.length > 0 ? (
                   <DropdownItem
                     label={t("Perfis salvos")}
-                    rgOptions={profiles.map((p) => ({ data: p.appid, label: p.name }))}
+                    rgOptions={profileOptions}
                     selectedOption={selectedProfile?.appid}
                     onChange={(option: { data: string }) => setPickedProfile(option.data)}
                   />
@@ -558,7 +568,7 @@ export function Content() {
               <PanelSectionRow>
                 <DropdownItem
                   label={t("Idioma")}
-                  rgOptions={[{ data: "pt", label: "Português" }, { data: "en", label: "English" }, { data: "es", label: "Español" }]}
+                  rgOptions={languageOptions}
                   selectedOption={settings.language}
                   onChange={(option: { data: Settings["language"] }) => patchSettings({ language: option.data })}
                 />

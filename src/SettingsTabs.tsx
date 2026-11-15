@@ -32,6 +32,9 @@ export function TabbedSettings({ children, capturing, header, onHelp }: { childr
       flow-children="column"
       onButtonDown={(event) => {
         if (capturing) return;
+        // Menus (dropdown) abrem em portal, mas os eventos sobem pela árvore React: ignora o que não é deste painel.
+        const target = event.target as Node | null;
+        if (target && !(event.currentTarget as unknown as Node).contains(target)) return;
         const button = event.detail.button;
         if (button !== GamepadButton.BUMPER_LEFT && button !== GamepadButton.BUMPER_RIGHT) return;
         event.stopPropagation();
