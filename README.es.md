@@ -183,8 +183,8 @@ Registros: `~/homebrew/logs/Crosshair/`.
 | ✅ | Validar LB, RB, LT, RT, Menu y View en el juego |
 | 🧭 | Calibración automática del centrado |
 | ✅ | Opacidad y contorno |
-| 💡 | Detección automática de resolución |
-| 💡 | Más modelos de mira |
+| ✅ | Detección automática de resolución |
+| ✅ | Más modelos de mira |
 | 💡 | Publicación en la tienda oficial de Decky |
 
 ✅ Completado · 🔄 En curso · 🧭 Planificado · 💡 Idea. Esta hoja de ruta expresa intenciones sin fechas.
@@ -193,6 +193,9 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Versión | Novedades |
 |:---:|---|
+| **1.7.11** | Hoja de ruta e historial actualizados |
+| **1.7.10** | **Resolución automática** por ID del dispositivo · 8 modelos nuevos de mira (15 en total) |
+| **1.7.9** | **Opacidad** del 10% al 100% · **contorno** con color y grosor · guardados en cada perfil |
 | **1.7.8** | Barra **Ayuda** solo con el toque · más espacio entre los botones de perfil · sin ✓ en pestañas y tamaños · foco más discreto · hoja de ruta actualizada |
 | **1.7.7** | Nuevo aspecto de las pestañas y del resumen (pestaña activa en azul claro, estado en amarillo) · barra **Ayuda** que explica cada pestaña · tarjeta de resumen justo debajo de la barra |
 | **1.7.6** | Selección clara en todas las pestañas: pestaña activa con marca y resalte propio, tamaño elegido con ✓, barras de sección abiertas o cerradas y foco visible en todos los botones |

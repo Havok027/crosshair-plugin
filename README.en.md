@@ -183,8 +183,8 @@ Logs: `~/homebrew/logs/Crosshair/`.
 | ✅ | Validate in-game LB, RB, LT, RT, Menu and View |
 | 🧭 | Automatic centering calibration |
 | ✅ | Opacity and outline |
-| 💡 | Automatic display resolution detection |
-| 💡 | More crosshair styles |
+| ✅ | Automatic display resolution detection |
+| ✅ | More crosshair styles |
 | 💡 | Publication in the official Decky store |
 
 ✅ Complete · 🔄 In progress · 🧭 Planned · 💡 Idea. This roadmap expresses intentions without dates.
@@ -193,6 +193,9 @@ Logs: `~/homebrew/logs/Crosshair/`.
 
 | Version | Highlights |
 |:---:|---|
+| **1.7.11** | Roadmap and history updated |
+| **1.7.10** | **Automatic resolution** by device ID · 8 new crosshair styles (15 in total) |
+| **1.7.9** | **Opacity** from 10% to 100% · **outline** with color and thickness · saved in each profile |
 | **1.7.8** | **Help** bar by touch only · more space between the profile buttons · no ✓ on tabs and sizes · subtler focus · roadmap updated |
 | **1.7.7** | New look for the tabs and summary card (active tab in light blue, status in yellow) · **Help** bar that explains each tab · summary card right below the bar |
 | **1.7.6** | Clear selection on every tab: active tab with its own mark and highlight, chosen size with a ✓, open or closed section bars, and a visible focus on every button |

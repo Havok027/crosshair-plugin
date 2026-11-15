@@ -226,8 +226,8 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 | ✅ | Validar a leitura em jogo | LB, RB, LT, RT, Menu e View |
 | 🧭 | Calibração automática | Centralizar cada modelo sem ajuste manual |
 | ✅ | Opacidade e contorno | Mais legibilidade em cenas claras |
-| 💡 | Resolução automática | Detectar a tela sem escolher na lista |
-| 💡 | Mais modelos | Mira com braços e formatos novos |
+| ✅ | Resolução automática | Escolhida pelo ID do aparelho; sem achar, usa a primeira da lista |
+| ✅ | Mais modelos | 15 modelos, com cruz, losango, parênteses, ângulos e setas |
 | ✅ | Português, inglês e espanhol | README com links de idioma e interface com dropdown |
 | ✅ | Interface em guias | Visual inspirado no Mako, com L1/R1 para trocar de guia e seções que recolhem |
 | 💡 | Loja do Decky | Publicar o plugin na loja oficial |
@@ -241,6 +241,9 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 
 | Versão | Destaques |
 |:---:|---|
+| **1.7.11** | Roadmap e histórico atualizados |
+| **1.7.10** | **Resolução automática** pelo ID do aparelho · 8 modelos novos de mira (15 no total) |
+| **1.7.9** | **Opacidade** de 10% a 100% · **contorno** com cor e espessura · salvos em cada perfil |
 | **1.7.8** | Barra **Ajuda** só por toque · botões de perfil mais separados · sem ✓ nas guias e nos tamanhos · foco mais discreto · roadmap atualizado |
 | **1.7.7** | Novo visual das guias e do resumo (guia ativa em azul claro, status em amarelo) · barra **Ajuda** que explica cada guia · cartão de resumo logo abaixo da barra |
 | **1.7.6** | Seleção clara em todas as guias: guia ativa com marca e destaque próprio, tamanho escolhido com ✓, barras de seção abertas ou fechadas, e foco visível em todos os botões |
