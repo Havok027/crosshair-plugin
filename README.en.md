@@ -192,6 +192,7 @@ Logs: `~/homebrew/logs/Crosshair/`.
 
 | Version | Highlights |
 |:---:|---|
+| **1.8.0** | Dropdowns apply on the first tap; the panel no longer jumps to the top on its own; purple header bar |
 | **1.7.14** | New look: translucent cards, sections with summaries and a live crosshair preview |
 | **1.7.13** | Dropdown no longer resets tab or closes the QAM |
 | **1.7.12** | Cross and Diamond fixed · # style removed · safer list selection |

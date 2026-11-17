@@ -1,7 +1,6 @@
-## Crosshair v1.7.14
+## Crosshair v1.8.0
 
-- Novo visual no padrão do SteamOS: cards translúcidos com borda fina, cantos arredondados e brilho de foco no D-Pad e no analógico.
-- Seções recolhíveis em um único card: ícone e nome à esquerda, resumo do valor atual e seta à direita (ex.: Aparência — Caixa • 100%).
-- Card de pré-visualização ao vivo da mira (cor, opacidade, contorno e tamanho) sobre fundo escuro com grade.
-- Controles rápidos lado a lado: ligar/desligar a mira e trocar o tamanho.
-- Abas, tabelas de resumo, barra de ajuda, botões e atalhos com o mesmo estilo, espaçamento uniforme e textos de ajuda com quebra de linha.
+- Listas suspensas (modelo, cor do contorno, resolução e idioma) agora aplicam a escolha já no primeiro toque, sem precisar repetir.
+- O painel não volta mais ao topo sozinho ao mudar um valor ou abrir/fechar uma seção; a posição da rolagem é preservada.
+- Respostas idênticas do backend não recriam mais as listas, evitando que o menu perca a seleção.
+- Cabeçalho com barra roxa brilhante, título branco e subtítulo cinza suave, mantendo cards translúcidos, bordas finas e cantos arredondados.

@@ -192,6 +192,7 @@ Registros: `~/homebrew/logs/Crosshair/`.
 
 | Versión | Novedades |
 |:---:|---|
+| **1.8.0** | Las listas desplegables se aplican al primer toque; el panel ya no vuelve arriba solo; barra morada en el encabezado |
 | **1.7.14** | Nuevo diseño: tarjetas translúcidas, secciones con resumen y vista previa de la mira |
 | **1.7.13** | La lista desplegable ya no vuelve a la primera pestaña ni cierra el QAM |
 | **1.7.12** | Cruz y Rombo corregidos · modelo # eliminado · selección de listas más segura |
