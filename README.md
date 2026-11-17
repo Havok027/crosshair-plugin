@@ -240,6 +240,7 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 
 | Versão | Destaques |
 |:---:|---|
+| **1.7.14** | Novo visual: cards translúcidos, seções com resumo e pré-visualização da mira |
 | **1.7.13** | Lista suspensa não volta mais à primeira aba nem fecha o QAM |
 | **1.7.12** | Cruz e Losango corrigidos · modelo # removido · seleção das listas mais segura |
 | **1.7.11** | Roadmap e histórico atualizados |

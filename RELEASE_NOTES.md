@@ -1,5 +1,7 @@
-## Crosshair v1.7.13
+## Crosshair v1.7.14
 
-- Listas suspensas: abrir ou escolher uma opção não volta mais para a primeira aba nem fecha o QAM.
-- L1/R1 de um menu aberto não troca mais a aba do plugin.
-- Opções das listas deixam de ser recriadas a cada atualização, evitando perda de foco.
+- Novo visual no padrão do SteamOS: cards translúcidos com borda fina, cantos arredondados e brilho de foco no D-Pad e no analógico.
+- Seções recolhíveis em um único card: ícone e nome à esquerda, resumo do valor atual e seta à direita (ex.: Aparência — Caixa • 100%).
+- Card de pré-visualização ao vivo da mira (cor, opacidade, contorno e tamanho) sobre fundo escuro com grade.
+- Controles rápidos lado a lado: ligar/desligar a mira e trocar o tamanho.
+- Abas, tabelas de resumo, barra de ajuda, botões e atalhos com o mesmo estilo, espaçamento uniforme e textos de ajuda com quebra de linha.
