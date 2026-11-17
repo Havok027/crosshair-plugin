@@ -8,7 +8,7 @@ import {
   ToggleField,
   showModal,
 } from "@decky/ui";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { FaGamepad, FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import {
   clearHotkey,
@@ -24,6 +24,8 @@ import {
 import type { GameInfo, PluginState, Settings } from "./api";
 import { ColorStrip, CrosshairPreview, FoldSection, HelpModal, HotkeyCard, ProfileTable, QuickControls, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
 import { applyHotkeyState, captureButtons } from "./hotkey";
+import { createScrollKeeper } from "./scroll";
+import type { ScrollKeeper } from "./scroll";
 import { LanguageContext, modelLabel, translator } from "./i18n";
 import type { MessageKey } from "./i18n";
 import { TabbedSettings } from "./SettingsTabs";
@@ -31,6 +33,23 @@ import { STYLES } from "./styles";
 import { COLORS, SIZE_PRESETS, getRunningGame, hexToRgb, rgbToHex } from "./utils";
 
 const CAPTURE_SECONDS = 12;
+
+const sameJson = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+// Reaproveita as partes do estado que não mudaram. Sem isso, cada resposta do backend
+// cria listas novas (modelos, resoluções, perfis) e o dropdown aberto perde a seleção.
+function settle(prev: PluginState | null, next: PluginState): PluginState {
+  if (!prev) return next;
+  if (sameJson(prev, next)) return prev;
+  return {
+    ...next,
+    settings: sameJson(prev.settings, next.settings) ? prev.settings : next.settings,
+    models: sameJson(prev.models, next.models) ? prev.models : next.models,
+    resolutions: sameJson(prev.resolutions, next.resolutions) ? prev.resolutions : next.resolutions,
+    profiles: sameJson(prev.profiles, next.profiles) ? prev.profiles : next.profiles,
+    hotkey: sameJson(prev.hotkey, next.hotkey) ? prev.hotkey : next.hotkey,
+  };
+}
 
 export function Content() {
   const [state, setState] = useState<PluginState | null>(null);
@@ -43,6 +62,8 @@ export function Content() {
   const [captureMessage, setCaptureMessage] = useState("");
   const captureRef = useRef<{ cancel: () => void } | null>(null);
   const [pickedProfile, setPickedProfile] = useState("");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const keeper = useRef<ScrollKeeper | null>(null);
 
   const t = translator(state?.settings.language ?? "pt");
 
@@ -51,9 +72,25 @@ export function Content() {
   const timer = useRef<number | undefined>(undefined);
   const seq = useRef(0);
 
+  const commit = (next: PluginState) => setState((prev) => settle(prev, next));
+
+  // Mantém a rolagem do painel quando o Steam a devolve ao topo sozinho
+  const ready = state !== null;
+  useEffect(() => {
+    if (!ready) return undefined;
+    keeper.current = createScrollKeeper(rootRef.current);
+    return () => {
+      keeper.current?.dispose();
+      keeper.current = null;
+    };
+  }, [ready]);
+  useLayoutEffect(() => {
+    keeper.current?.afterRender();
+  });
+
   useEffect(() => {
     getState()
-      .then(setState)
+      .then(commit)
       .catch((error) => {
         console.error(error);
         setStatus(t("Falha ao carregar: ") + String(error));
@@ -71,7 +108,7 @@ export function Content() {
 
   const run = async (action: () => Promise<PluginState>, okMessage: string) => {
     try {
-      setState(await action());
+      commit(await action());
       setStatus(okMessage);
     } catch (error) {
       console.error(error);
@@ -120,29 +157,38 @@ export function Content() {
     }
   };
 
-  const queue = (patch: Record<string, unknown>) => {
-    pending.current = { ...pending.current, ...patch };
-    if (timer.current !== undefined) window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(async () => {
-      const toSend = pending.current;
-      pending.current = {};
-      const mine = ++seq.current;
-      try {
-        const next = await updateSettings(toSend);
-        // Resposta velha não pode desfazer uma escolha mais nova.
-        if (mine !== seq.current || Object.keys(pending.current).length > 0) return;
-        setState(next);
-        setStatus("");
-      } catch (error) {
-        console.error(error);
-        setStatus(t("Falha ao aplicar: ") + String(error));
-      }
-    }, 150);
+  const flush = async () => {
+    timer.current = undefined;
+    const toSend = pending.current;
+    if (Object.keys(toSend).length === 0) return;
+    pending.current = {};
+    const mine = ++seq.current;
+    try {
+      const next = await updateSettings(toSend);
+      // Resposta velha não pode desfazer uma escolha mais nova.
+      if (mine !== seq.current || Object.keys(pending.current).length > 0) return;
+      commit(next);
+      setStatus("");
+    } catch (error) {
+      console.error(error);
+      setStatus(t("Falha ao aplicar: ") + String(error));
+    }
   };
 
-  const patchSettings = (patch: Partial<Settings>) => {
+  // immediate: escolhas discretas (dropdown) vão ao backend já no primeiro toque
+  const queue = (patch: Record<string, unknown>, immediate = false) => {
+    pending.current = { ...pending.current, ...patch };
+    if (timer.current !== undefined) window.clearTimeout(timer.current);
+    if (immediate) {
+      void flush();
+      return;
+    }
+    timer.current = window.setTimeout(flush, 150);
+  };
+
+  const patchSettings = (patch: Partial<Settings>, immediate = false) => {
     setState((prev) => (prev ? { ...prev, settings: { ...prev.settings, ...patch } } : prev));
-    queue(patch);
+    queue(patch, immediate);
   };
 
   const patchHotkey = (patch: { hotkey_enabled?: boolean; hotkey_hold?: number }) => {
@@ -208,8 +254,16 @@ export function Content() {
 
   return (
     <LanguageContext.Provider value={settings.language}>
-      <div className="xh-plugin">
+      <div className="xh-plugin" ref={rootRef}>
         <style>{STYLES}</style>
+
+        <div className="xh-header">
+          <div className="xh-header-bar" />
+          <div className="xh-header-title">Crosshair</div>
+          <div className="xh-header-sub">
+            {(settings.enabled ? t("Crosshair ativo") : t("Crosshair desligado")) + " • " + modelLabel(currentModel.id, t)}
+          </div>
+        </div>
 
         <TabbedSettings
           capturing={capturing}
@@ -278,7 +332,7 @@ export function Content() {
                   label={t("Modelo")}
                   rgOptions={modelOptions}
                   selectedOption={settings.model}
-                  onChange={(option: { data: string }) => patchSettings({ model: option.data })}
+                  onChange={(option: { data: string }) => patchSettings({ model: option.data }, true)}
                 />
               </PanelSectionRow>
               <PanelSectionRow>
@@ -379,7 +433,7 @@ export function Content() {
                       label={t("Cor do contorno")}
                       rgOptions={outlineOptions}
                       selectedOption={settings.outline_color}
-                      onChange={(option: { data: string }) => patchSettings({ outline_color: option.data })}
+                      onChange={(option: { data: string }) => patchSettings({ outline_color: option.data }, true)}
                     />
                   </PanelSectionRow>
                   <PanelSectionRow>
@@ -411,7 +465,7 @@ export function Content() {
                   label={t("Resolução da tela")}
                   rgOptions={resolutionOptions}
                   selectedOption={settings.resolution}
-                  onChange={(option: { data: string }) => patchSettings({ resolution: option.data })}
+                  onChange={(option: { data: string }) => patchSettings({ resolution: option.data }, true)}
                 />
               </PanelSectionRow>
               <PanelSectionRow>
@@ -580,7 +634,7 @@ export function Content() {
                   label={t("Idioma")}
                   rgOptions={languageOptions}
                   selectedOption={settings.language}
-                  onChange={(option: { data: Settings["language"] }) => patchSettings({ language: option.data })}
+                  onChange={(option: { data: Settings["language"] }) => patchSettings({ language: option.data }, true)}
                 />
               </PanelSectionRow>
             </FoldSection>

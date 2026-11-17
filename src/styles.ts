@@ -8,9 +8,16 @@ export const STYLES = `
   --xh-accent: #5b7cff;
   --xh-focus: 0 0 0 2px rgba(91,124,255,0.85), 0 0 12px 2px rgba(91,124,255,0.45);
   --xh-muted: #9aa7b4;
+  --xh-purple: #7B2CBF;
   color: #f2f6fa;
 }
 .xh-section-title { width: 100%; margin: 8px 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--xh-muted); }
+
+/* Cabeçalho: barra roxa brilhante, título branco e subtítulo cinza */
+.xh-header { margin: 0 0 10px; padding: 0 2px; }
+.xh-header-bar { height: 4px; border-radius: 4px; margin: 0 0 10px; background: var(--xh-purple); box-shadow: 0 0 10px 1px rgba(123,44,191,0.85), 0 0 22px 3px rgba(123,44,191,0.45); }
+.xh-header-title { font-size: 16px; font-weight: 700; color: #ffffff; line-height: 1.2; }
+.xh-header-sub { margin-top: 2px; font-size: 12px; color: var(--xh-muted); }
 
 /* Container base de todos os blocos */
 .xh-card, .xh-table, .xh-fold-card, .xh-preview, .xh-help {

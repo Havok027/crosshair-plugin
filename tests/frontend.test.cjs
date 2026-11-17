@@ -180,7 +180,7 @@ test("L1/R1 cycle the three tabs, retain focus, persist selection, and stay idle
   press(6); assert.equal(saved, "settings");
 });
 
-function mountContent({ game = null, profiles = [], language = "en" } = {}) {
+function mountContent({ game = null, profiles = [], language = "en", clone = false } = {}) {
   let state = { settings: { language, model: "box", color: "FF007B", size: 100, opacity: 100, outline: false, outline_color: "000000", outline_width: 2, resolution: "deck" },
     models: [{ id: "box" }], resolutions: [{ id: "deck", label: "Deck" }], profiles, hotkey: { buttons: [] }, offset_x: 1, offset_y: 2 };
   const cleanups = [], updates = [], calls = [], modals = [];
@@ -195,17 +195,19 @@ function mountContent({ game = null, profiles = [], language = "en" } = {}) {
       useRef: (value) => ({ current: value }),
       useMemo: (factory) => factory(),
       useEffect: (effect) => { cleanups.push(effect()); },
+      useLayoutEffect: (effect) => { effect(); },
     },
     "@decky/ui": { ...Object.fromEntries(["ButtonItem", "DialogButton", "DropdownItem", "PanelSection", "PanelSectionRow", "SliderField", "ToggleField"].map((id) => [id, id])),
       showModal: (element) => modals.push(element) },
     "react-icons/fa": { FaGamepad: "Icon", FaPen: "Icon", FaPlus: "Icon", FaTrash: "Icon" },
-    "./api": { getState: async () => state, updateSettings: async (patch) => { updates.push(patch); return state; },
+    "./api": { getState: async () => state, updateSettings: async (patch) => { updates.push(patch); return clone ? JSON.parse(JSON.stringify(state)) : state; },
       renameProfile: api("rename"), saveProfile: api("save"), deleteProfile: api("delete"), resetNudge: api("x"), resetComp: api("x"),
       setHotkey: api("x"), clearHotkey: api("x") },
     "./components": { ColorStrip: "ColorStrip", CrosshairPreview: "CrosshairPreview", QuickControls: "QuickControls", FoldSection: "FoldSection", HotkeyCard: "HotkeyCard", ProfileTable: "ProfileTable",
       RenameProfileModal: "RenameProfileModal", SettingsSection: "Section", ShortcutTable: "ShortcutTable", SizeChips: "SizeChips",
       StatusTable: "StatusTable" },
-    "./hotkey": { applyHotkeyState() {} }, "./i18n": i18n, "./SettingsTabs": { TabbedSettings: "Tabs" },
+    "./hotkey": { applyHotkeyState() {} }, "./i18n": i18n,
+    "./scroll": { createScrollKeeper: () => ({ afterRender() {}, dispose() {} }) }, "./SettingsTabs": { TabbedSettings: "Tabs" },
     "./styles": { STYLES: "" }, "./utils": { COLORS: [{ name: "Rosa", hex: "FF007B" }], SIZE_PRESETS: [50, 100], getRunningGame: () => game, hexToRgb: () => [255, 0, 123] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" }, setTimeout: () => 1, clearTimeout() {} },
     localStorage: { getItem: () => null, setItem() {} } });
@@ -224,7 +226,7 @@ function collect(tree, tab, match) {
   return found;
 }
 
-test("language dropdown is localized and its pending choice is saved when QAM closes", async () => {
+test("language dropdown is localized and applies on the first choice", async () => {
   const app = mountContent();
   const tree = app.content.Content();
   await Promise.resolve();
@@ -237,10 +239,92 @@ test("language dropdown is localized and its pending choice is saved when QAM cl
   assert.equal(dropdown.props.selectedOption, "en");
   dropdown.props.onChange({ data: "es" });
   assert.equal(app.state.settings.language, "es");
-  assert.equal(app.updates.length, 0);
-  for (const cleanup of app.cleanups) cleanup?.();
   assert.equal(app.updates.length, 1);
   assert.equal(app.updates[0].language, "es");
+  for (const cleanup of app.cleanups) cleanup?.();
+  assert.equal(app.updates.length, 1);
+});
+
+test("dropdowns send the choice at once; sliders wait and are saved when QAM closes", async () => {
+  const app = mountContent();
+  const tree = app.content.Content();
+  await Promise.resolve();
+  const [model] = collect(tree, "appearance", (n) => n.props.label === "Style");
+  model.props.onChange({ data: "dot" });
+  assert.equal(app.updates.length, 1);
+  assert.equal(JSON.stringify(app.updates[0]), JSON.stringify({ model: "dot" }));
+  const [resolution] = collect(tree, "appearance", (n) => n.props.rgOptions && n.props.selectedOption === "deck");
+  resolution.props.onChange({ data: "deck" });
+  assert.equal(app.updates.length, 2);
+  const before = app.updates.length;
+  const [opacity] = collect(tree, "appearance", (n) => n.props.label === "Opacity");
+  opacity.props.onChange(40);
+  assert.equal(app.updates.length, before);
+  for (const cleanup of app.cleanups) cleanup?.();
+  assert.equal(app.updates.length, before + 1);
+  assert.equal(app.updates[before].opacity, 40);
+});
+
+test("an identical backend reply keeps the same state object (no re-render churn)", async () => {
+  const app = mountContent({ clone: true });
+  const tree = app.content.Content();
+  await Promise.resolve();
+  const [model] = collect(tree, "appearance", (n) => n.props.label === "Style");
+  model.props.onChange({ data: "dot" });
+  const optimistic = app.state;
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(app.state, optimistic);
+  assert.equal(app.state.models, optimistic.models);
+});
+
+test("header has the glowing purple bar, white title and soft gray subtitle", async () => {
+  const app = mountContent();
+  const tree = app.content.Content();
+  await Promise.resolve();
+  const classes = (node) => (node.props.className ?? "").split(" ");
+  const find = (name) => collect(tree, "appearance", (n) => classes(n).includes(name));
+  assert.equal(find("xh-header").length, 1);
+  assert.equal(find("xh-header-bar").length, 1);
+  assert.equal(find("xh-header-title").length, 1);
+  assert.equal(find("xh-header-sub").length, 1);
+});
+
+test("scroll keeper undoes a jump to the top after a render, but not user scrolling or tab changes", () => {
+  const { createScrollKeeper } = load("scroll.ts", {});
+  let now = 0, listener, panel = "xh-panel-appearance";
+  const scroller = {
+    scrollTop: 0,
+    addEventListener: (_, fn) => { listener = fn; },
+    removeEventListener() { listener = undefined; },
+    querySelector: () => ({ id: panel }),
+  };
+  const keeper = createScrollKeeper(null, { scroller, now: () => now });
+  const userScrollTo = (top) => { scroller.scrollTop = top; listener(); };
+
+  userScrollTo(300);
+  keeper.afterRender();
+  scroller.scrollTop = 0; listener();           // Steam devolve ao topo logo após renderizar
+  assert.equal(scroller.scrollTop, 300);
+
+  keeper.afterRender();
+  scroller.scrollTop = 0;                        // reset no meio da renderização
+  keeper.afterRender();
+  assert.equal(scroller.scrollTop, 300);
+
+  now += 1000;                                   // fora da janela: o usuário pode ir ao topo
+  scroller.scrollTop = 0; listener();
+  assert.equal(scroller.scrollTop, 0);
+
+  userScrollTo(300);
+  keeper.afterRender();
+  panel = "xh-panel-profiles";                   // troca de aba: topo é esperado
+  keeper.afterRender();
+  scroller.scrollTop = 0; listener();
+  assert.equal(scroller.scrollTop, 0);
+
+  keeper.dispose();
+  assert.equal(listener, undefined);
+  assert.equal(createScrollKeeper(null).afterRender(), undefined);
 });
 
 test("shortcut settings live in the Settings tab only", async () => {
@@ -392,6 +476,7 @@ test("styles give selected and focused controls different looks", () => {
   assert.ok(!STYLES.includes(".xh-tab.xh-selected::after"));
   assert.ok(!STYLES.includes(".xh-size.xh-active::before"));
   assert.ok(!STYLES.includes("✓"));
+  for (const needle of ["#7B2CBF", "rgba(255,255,255,0.04)", "1px solid", "border-radius: 10px", ".xh-header-bar"]) assert.ok(STYLES.includes(needle), needle);
 });
 
 test("Help bar opens the help of the active tab by touch only, never with Y", () => {
