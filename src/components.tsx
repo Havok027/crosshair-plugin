@@ -1,7 +1,7 @@
 import { ConfirmModal, DialogButton, Focusable, PanelSection, PanelSectionRow, TextField } from "@decky/ui";
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { FaCheck, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaCheck, FaCrosshairs, FaDesktop, FaGamepad, FaGlobe, FaKeyboard } from "react-icons/fa";
 import type { HotkeyState, ProfileInfo, Settings } from "./api";
 import { buttonName } from "./hotkey";
 import { useTranslation } from "./i18n";
@@ -17,8 +17,18 @@ export function SettingsSection({ title, children }: { title?: string; children:
   );
 }
 
-// Seção que pode ser recolhida pela barra com seta (como no Mako). A escolha fica salva.
-export function FoldSection({ id, title, children }: { id: string; title: string; children: ReactNode }) {
+// Ícone de cada seção recolhível (pelo id)
+const FOLD_ICONS: Record<string, ReactNode> = {
+  appearance: <FaCrosshairs />,
+  display: <FaDesktop />,
+  profiles: <FaGamepad />,
+  language: <FaGlobe />,
+  shortcut: <FaKeyboard />,
+};
+
+// Seção recolhível em um único card: ícone + nome à esquerda, resumo + seta à direita.
+// A escolha (aberta/fechada) fica salva.
+export function FoldSection({ id, title, summary, children }: { id: string; title: string; summary?: string; children: ReactNode }) {
   const [folded, setFolded] = useState<boolean>(() => {
     try { return localStorage.getItem("crosshair-fold-" + id) === "1"; } catch { return false; }
   });
@@ -29,14 +39,66 @@ export function FoldSection({ id, title, children }: { id: string; title: string
   };
   return (
     <PanelSection>
-      <PanelSectionRow><div className="xh-section-title">{title}</div></PanelSectionRow>
-      <PanelSectionRow>
-        <DialogButton className={"xh-fold" + (folded ? " xh-closed" : " xh-open")} onClick={toggle} aria-expanded={!folded}>
-          {folded ? <FaChevronDown /> : <FaChevronUp />}
-        </DialogButton>
-      </PanelSectionRow>
-      {!folded && children}
+      <div className="xh-fold-card">
+        <PanelSectionRow>
+          <DialogButton className={"xh-fold" + (folded ? " xh-closed" : " xh-open")} onClick={toggle} aria-expanded={!folded}>
+            <span className="xh-fold-left">{FOLD_ICONS[id]}<span className="xh-fold-title">{title}</span></span>
+            <span className="xh-fold-right">
+              {summary ? <span className="xh-fold-sum">{summary}</span> : null}
+              {folded ? <FaChevronRight /> : <FaChevronDown />}
+            </span>
+          </DialogButton>
+        </PanelSectionRow>
+        {!folded && <div className="xh-fold-body">{children}</div>}
+      </div>
     </PanelSection>
+  );
+}
+
+// Card de pré-visualização: mostra o modelo com a cor, opacidade, contorno e tamanho atuais
+export function CrosshairPreview(props: { settings: Settings; lines: string[]; label: string }) {
+  const { settings, lines } = props;
+  const fontSize = Math.max(10, Math.min(40, Math.round((14 * settings.size) / 100)));
+  const stroke = "#" + settings.outline_color;
+  const w = Math.max(1, Math.round(settings.outline_width / 2));
+  const shadow = settings.outline
+    ? [-w + "px 0", w + "px 0", "0 " + -w + "px", "0 " + w + "px"].map((o) => o + " 0 " + stroke).join(", ")
+    : "none";
+  return (
+    <div className={"xh-preview" + (settings.enabled ? "" : " xh-off")}>
+      <div className="xh-preview-label"><span>{props.label}</span><span>{settings.size}% · {settings.opacity}%</span></div>
+      <div className="xh-preview-stage">
+        <pre
+          className="xh-preview-mark"
+          style={{ color: "#" + settings.color, opacity: settings.opacity / 100, fontSize: fontSize + "px", textShadow: shadow }}
+        >{lines.join("\n")}</pre>
+      </div>
+    </div>
+  );
+}
+
+// Dois controles rápidos lado a lado: liga/desliga a mira e passa pelos tamanhos prontos
+export function QuickControls(props: {
+  enabled: boolean;
+  size: number;
+  enabledLabel: string;
+  onLabel: string;
+  offLabel: string;
+  sizeLabel: string;
+  onToggle: () => void;
+  onCycleSize: () => void;
+}) {
+  return (
+    <Focusable className="xh-quick" flow-children="row">
+      <Focusable className={"xh-quick-card" + (props.enabled ? " xh-on" : "")} onActivate={props.onToggle}>
+        <span className="xh-q-label">{props.enabledLabel}</span>
+        <span className="xh-q-value">{props.enabled ? props.onLabel : props.offLabel}</span>
+      </Focusable>
+      <Focusable className="xh-quick-card" onActivate={props.onCycleSize}>
+        <span className="xh-q-label">{props.sizeLabel}</span>
+        <span className="xh-q-value">{props.size}%</span>
+      </Focusable>
+    </Focusable>
   );
 }
 

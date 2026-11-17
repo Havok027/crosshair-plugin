@@ -193,6 +193,7 @@ function mountContent({ game = null, profiles = [], language = "en" } = {}) {
         ? [state, (next) => { state = typeof next === "function" ? next(state) : next; }]
         : [typeof initial === "function" ? initial() : initial, () => {}],
       useRef: (value) => ({ current: value }),
+      useMemo: (factory) => factory(),
       useEffect: (effect) => { cleanups.push(effect()); },
     },
     "@decky/ui": { ...Object.fromEntries(["ButtonItem", "DialogButton", "DropdownItem", "PanelSection", "PanelSectionRow", "SliderField", "ToggleField"].map((id) => [id, id])),
@@ -201,11 +202,11 @@ function mountContent({ game = null, profiles = [], language = "en" } = {}) {
     "./api": { getState: async () => state, updateSettings: async (patch) => { updates.push(patch); return state; },
       renameProfile: api("rename"), saveProfile: api("save"), deleteProfile: api("delete"), resetNudge: api("x"), resetComp: api("x"),
       setHotkey: api("x"), clearHotkey: api("x") },
-    "./components": { ColorStrip: "ColorStrip", FoldSection: "FoldSection", HotkeyCard: "HotkeyCard", ProfileTable: "ProfileTable",
+    "./components": { ColorStrip: "ColorStrip", CrosshairPreview: "CrosshairPreview", QuickControls: "QuickControls", FoldSection: "FoldSection", HotkeyCard: "HotkeyCard", ProfileTable: "ProfileTable",
       RenameProfileModal: "RenameProfileModal", SettingsSection: "Section", ShortcutTable: "ShortcutTable", SizeChips: "SizeChips",
       StatusTable: "StatusTable" },
     "./hotkey": { applyHotkeyState() {} }, "./i18n": i18n, "./SettingsTabs": { TabbedSettings: "Tabs" },
-    "./styles": { STYLES: "" }, "./utils": { COLORS: [{ name: "Rosa", hex: "FF007B" }], getRunningGame: () => game, hexToRgb: () => [255, 0, 123] },
+    "./styles": { STYLES: "" }, "./utils": { COLORS: [{ name: "Rosa", hex: "FF007B" }], SIZE_PRESETS: [50, 100], getRunningGame: () => game, hexToRgb: () => [255, 0, 123] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" }, setTimeout: () => 1, clearTimeout() {} },
     localStorage: { getItem: () => null, setItem() {} } });
   return { content, cleanups, updates, calls, modals, get state() { return state; } };
@@ -319,7 +320,7 @@ test("sections can be folded and keep their saved state", () => {
       folded = value; return [value, (next) => { folded = next; }]; } },
     "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
       PanelSectionRow: "Row", TextField: "TextField" },
-    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronRight: "Right", FaCrosshairs: "Icon", FaDesktop: "Icon", FaGamepad: "Icon", FaGlobe: "Icon", FaKeyboard: "Icon" },
     "./hotkey": { buttonName: () => "?" }, "./i18n": { useTranslation: () => (key) => key }, "./utils": { COLORS: [], SIZE_PRESETS: [] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } },
     localStorage: { getItem: (key) => store[key] ?? null, setItem: (key, value) => { store[key] = value; } } });
@@ -340,7 +341,7 @@ test("profile table compares the saved profile with the current settings", () =>
     react: { useState: (initial) => [initial, () => {}] },
     "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
       PanelSectionRow: "Row", TextField: "TextField" },
-    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronRight: "Right", FaCrosshairs: "Icon", FaDesktop: "Icon", FaGamepad: "Icon", FaGlobe: "Icon", FaKeyboard: "Icon" },
     "./hotkey": { buttonName: (id) => "B" + id }, "./i18n": { useTranslation: () => i18n.translator("en") },
     "./utils": { COLORS: [], SIZE_PRESETS: [] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } } });
@@ -365,7 +366,7 @@ test("selected state is visible on tabs, size chips and section bars, apart from
     react: { useState: (initial) => [typeof initial === "function" ? initial() : initial, () => {}] },
     "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
       PanelSectionRow: "Row", TextField: "TextField" },
-    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronRight: "Right", FaCrosshairs: "Icon", FaDesktop: "Icon", FaGamepad: "Icon", FaGlobe: "Icon", FaKeyboard: "Icon" },
     "./hotkey": { buttonName: () => "?" }, "./i18n": { useTranslation: () => (key) => key }, "./utils": { COLORS: [], SIZE_PRESETS: [50, 100, 150] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } },
     localStorage: { getItem: () => stored, setItem() {} } });
@@ -440,7 +441,7 @@ test("profile table notices a different opacity or outline", () => {
     react: { useState: (initial) => [initial, () => {}] },
     "@decky/ui": { ConfirmModal: "ConfirmModal", DialogButton: "DialogButton", Focusable: "Focusable", PanelSection: "Section",
       PanelSectionRow: "Row", TextField: "TextField" },
-    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronUp: "Up" },
+    "react-icons/fa": { FaCheck: "Check", FaChevronDown: "Down", FaChevronRight: "Right", FaCrosshairs: "Icon", FaDesktop: "Icon", FaGamepad: "Icon", FaGlobe: "Icon", FaKeyboard: "Icon" },
     "./hotkey": { buttonName: (id) => "B" + id }, "./i18n": { useTranslation: () => i18n.translator("en") },
     "./utils": { COLORS: [], SIZE_PRESETS: [] },
   }, { window: { SP_REACT: { createElement, Fragment: "Fragment" } } });

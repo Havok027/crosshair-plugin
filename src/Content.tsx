@@ -22,13 +22,13 @@ import {
   updateSettings,
 } from "./api";
 import type { GameInfo, PluginState, Settings } from "./api";
-import { ColorStrip, FoldSection, HelpModal, HotkeyCard, ProfileTable, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
+import { ColorStrip, CrosshairPreview, FoldSection, HelpModal, HotkeyCard, ProfileTable, QuickControls, RenameProfileModal, SettingsSection, ShortcutTable, SizeChips, StatusTable } from "./components";
 import { applyHotkeyState, captureButtons } from "./hotkey";
 import { LanguageContext, modelLabel, translator } from "./i18n";
 import type { MessageKey } from "./i18n";
 import { TabbedSettings } from "./SettingsTabs";
 import { STYLES } from "./styles";
-import { COLORS, getRunningGame, hexToRgb, rgbToHex } from "./utils";
+import { COLORS, SIZE_PRESETS, getRunningGame, hexToRgb, rgbToHex } from "./utils";
 
 const CAPTURE_SECONDS = 12;
 
@@ -220,20 +220,30 @@ export function Content() {
           header={(tab) => tab === "appearance" ? (
           <SettingsSection>
             <PanelSectionRow>
+              <CrosshairPreview settings={settings} lines={currentModel.lines} label={modelLabel(currentModel.id, t)} />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <QuickControls
+                enabled={settings.enabled}
+                size={settings.size}
+                enabledLabel={t("Mostrar crosshair")}
+                onLabel={t("Ativo")}
+                offLabel={t("Desligado")}
+                sizeLabel={t("Tamanho")}
+                onToggle={() => patchSettings({ enabled: !settings.enabled })}
+                onCycleSize={() => patchSettings({ size: SIZE_PRESETS.find((p) => p > settings.size) ?? SIZE_PRESETS[0] })}
+              />
+            </PanelSectionRow>
+            <PanelSectionRow>
+              <div className="xh-hint">{t("Substitui o overlay de desempenho (MangoHud).")}</div>
+            </PanelSectionRow>
+            <PanelSectionRow>
               <StatusTable
                 settings={settings}
                 modelLabel={modelLabel(currentModel.id, t)}
                 resolutionLabel={resolutionLabel}
                 offsetX={state.offset_x}
                 offsetY={state.offset_y}
-              />
-            </PanelSectionRow>
-            <PanelSectionRow>
-              <ToggleField
-                label={t("Mostrar crosshair")}
-                description={t("Substitui o overlay de desempenho (MangoHud).")}
-                checked={settings.enabled}
-                onChange={(value: boolean) => patchSettings({ enabled: value })}
               />
             </PanelSectionRow>
           </SettingsSection>
@@ -262,7 +272,7 @@ export function Content() {
           </SettingsSection>
         )}>{(tab) => (<>
           {tab === "appearance" && (<>
-            <FoldSection id="appearance" title={t("Aparência")}>
+            <FoldSection id="appearance" title={t("Aparência")} summary={modelLabel(currentModel.id, t) + " • " + settings.size + "%"}>
               <PanelSectionRow>
                 <DropdownItem
                   label={t("Modelo")}
@@ -387,7 +397,7 @@ export function Content() {
               )}
             </FoldSection>
 
-            <FoldSection id="display" title={t("Tela e posição")}>
+            <FoldSection id="display" title={t("Tela e posição")} summary={state.offset_x + ", " + state.offset_y}>
               <PanelSectionRow>
                 <ToggleField
                   label={t("Resolução automática")}
@@ -487,7 +497,7 @@ export function Content() {
           </>)}
 
           {tab === "profiles" && (
-            <FoldSection id="profiles" title={t("Perfis de jogo")}>
+            <FoldSection id="profiles" title={t("Perfis de jogo")} summary={selectedProfile ? selectedProfile.name : t("Nenhum perfil salvo")}>
               <PanelSectionRow>
                 <div className="xh-hint">{t("profiles_info")}</div>
               </PanelSectionRow>
@@ -564,7 +574,7 @@ export function Content() {
           )}
 
           {tab === "settings" && (<>
-            <FoldSection id="language" title={t("Configurações")}>
+            <FoldSection id="language" title={t("Configurações")} summary={languageOptions.find((o) => o.data === settings.language)?.label}>
               <PanelSectionRow>
                 <DropdownItem
                   label={t("Idioma")}
@@ -575,7 +585,7 @@ export function Content() {
               </PanelSectionRow>
             </FoldSection>
 
-            <FoldSection id="shortcut" title={t("Atalho de botões")}>
+            <FoldSection id="shortcut" title={t("Atalho de botões")} summary={hotkey.buttons.length === 2 && hotkey.enabled ? t("Atalho ativo") : t("Atalho desligado")}>
               <PanelSectionRow>
                 <ToggleField
                   label={t("Ligar/desligar com 2 botões")}
