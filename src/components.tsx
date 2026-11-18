@@ -68,10 +68,14 @@ export function CrosshairPreview(props: { settings: Settings; lines: string[]; l
     <div className={"xh-preview" + (settings.enabled ? "" : " xh-off")}>
       <div className="xh-preview-label"><span>{props.label}</span><span>{settings.size}% · {settings.opacity}%</span></div>
       <div className="xh-preview-stage">
-        <pre
+        <div
           className="xh-preview-mark"
           style={{ color: "#" + settings.color, opacity: settings.opacity / 100, fontSize: fontSize + "px", textShadow: shadow }}
-        >{lines.join("\n")}</pre>
+        >
+          {lines.map((l, i) => (
+            <div className="xh-preview-line" key={i}>{l.replace(/^[\s\u00a0]+|[\s\u00a0]+$/g, "") || "\u00a0"}</div>
+          ))}
+        </div>
       </div>
     </div>
   );

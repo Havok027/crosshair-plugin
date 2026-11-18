@@ -88,7 +88,8 @@ export const STYLES = `
   background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 20px 20px; background-position: center;
 }
-.xh-preview-mark { margin: 0; font-family: monospace; font-weight: 700; line-height: 1; white-space: pre; text-align: center; transition: opacity 0.15s; }
+.xh-preview-mark { margin: 0; display: flex; flex-direction: column; align-items: center; font-family: monospace; font-weight: 700; line-height: 1; white-space: pre; text-align: center; transition: opacity 0.15s; }
+.xh-preview-line { display: block; width: 100%; text-align: center; line-height: 1; min-height: 1em; }
 .xh-preview.xh-off .xh-preview-mark { opacity: 0.15 !important; }
 
 /* Controles rápidos lado a lado */
