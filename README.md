@@ -241,6 +241,7 @@ Os logs do plugin ficam em `~/homebrew/logs/Crosshair/`.
 | Versão | Destaques |
 |:---:|---|
 | **1.8.0** | Listas suspensas aplicam no primeiro toque; o painel não volta mais ao topo sozinho; cabeçalho com barra roxa |
+| **1.8.1** | Pré-visualização: miras com parte vertical (cruz, losango etc.) alinhadas |
 | **1.7.14** | Novo visual: cards translúcidos, seções com resumo e pré-visualização da mira |
 | **1.7.13** | Lista suspensa não volta mais à primeira aba nem fecha o QAM |
 | **1.7.12** | Cruz e Losango corrigidos · modelo # removido · seleção das listas mais segura |
